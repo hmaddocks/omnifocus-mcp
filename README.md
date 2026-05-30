@@ -51,31 +51,31 @@ This tool was heavily inspired by [OmniFocus MCP Server](https://github.com/them
 
 ## Requirements
 
-- Ruby 3.2 or later
+- Ruby 3.4 or later
 - macOS with OmniFocus 4 installed
 
 ## Install
 
 ```sh
-bundle install
+gem install omnifocus-mcp
 ```
 
 ## Run
 
 ```sh
-bundle exec bin/omnifocus-mcp
+omnifocus-mcp
 ```
 
 The server speaks MCP over stdio. Test it with the MCP inspector:
 
 ```sh
-npx @modelcontextprotocol/inspector bundle exec bin/omnifocus-mcp
+npx @modelcontextprotocol/inspector omnifocus-mcp
 ```
 
 ## Configure an MCP Client
 
-Add this server to any MCP client that supports stdio servers. Replace
-`/path/to/omnifocus_mcp` with the path to this repository:
+After installing the executable, add this server to any MCP client that supports
+stdio servers:
 
 ```json
 {
@@ -90,10 +90,10 @@ Add this server to any MCP client that supports stdio servers. Replace
 
 ## Client Instructions
 
-This server uses `fast-mcp` 1.6, which does not currently expose MCP server
-instructions during client initialization. To give an MCP client better
-guidance, copy the instructions below into a Cursor skill, your project's
-`AGENTS.md`, or another client-specific instruction file.
+This server uses [fast-mcp](https://github.com/yjacquin/fast-mcp) 1.6, which
+does not currently expose MCP server instructions during client initialization.
+To give an MCP client better guidance, copy the instructions below into a skill,
+rule, your project's `AGENTS.md`, or another client-specific instruction file.
 
 ```text
 OmniFocus MCP server for macOS task management.
