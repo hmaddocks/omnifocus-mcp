@@ -65,8 +65,8 @@ RSpec.describe OmnifocusMcp::Tools::Presenters::QueryReply do
   describe ".format" do
     subject(:output) { described_class.format(args: {}, params: params, match: match) }
 
-    let(:params) { Struct.new(:entity, :summary, :limit).new("tasks", true, nil) }
-    let(:match) { Struct.new(:items, :count).new(nil, 3) }
+    let(:params) { Data.define(:entity, :summary, :limit).new("tasks", true, nil) }
+    let(:match) { Data.define(:items, :count).new(items: nil, count: 3) }
 
     it "renders summary query replies" do
       expect(output).to eq("Found 3 tasks matching your criteria.")
