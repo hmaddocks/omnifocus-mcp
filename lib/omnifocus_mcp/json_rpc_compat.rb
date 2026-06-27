@@ -10,11 +10,16 @@ module OmnifocusMcp
     module_function
 
     def apply!
+      $stdin.set_encoding(Encoding::UTF_8) if $stdin.respond_to?(:set_encoding)
       patch_server_send_error!
       patch_stdio_transport!
     end
 
     def normalize_id(id) = id.nil? ? UNKNOWN_REQUEST_ID : id
+
+    # MCP clients send UTF-8 JSON, but stdio may be US-ASCII-labelled (same as
+    # osascript stdout in ScriptRunner). Re-label before strip/parse.
+    def normalize_line(line) = line.to_s.dup.force_encoding(Encoding::UTF_8).strip
 
     def patch_server_send_error!
       return if server_send_error_patched?
@@ -29,6 +34,7 @@ module OmnifocusMcp
     end
     private_class_method :patch_server_send_error!
 
+    # rubocop:disable Metrics
     def patch_stdio_transport!
       return if stdio_transport_patched?
 
@@ -40,7 +46,7 @@ module OmnifocusMcp
           @running = true
 
           while @running && (line = $stdin.gets)
-            stripped = line.strip
+            stripped = OmnifocusMcp::JsonRpcCompat.normalize_line(line)
             next if stripped.empty?
 
             begin
@@ -60,6 +66,7 @@ module OmnifocusMcp
         end
       end
     end
+    # rubocop:enable Metrics
     private_class_method :patch_stdio_transport!
 
     def server_send_error_patched?

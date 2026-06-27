@@ -168,4 +168,33 @@ RSpec.describe "omnifocus-mcp executable" do
       expect(stdout).to be_empty
     end
   end
+
+  context "when stdin contains UTF-8 in the JSON payload" do
+    subject(:stdio) { OmnifocusMcpSmokeHelpers.run_mcp(stdin_data) }
+
+    let(:stdin_data) do
+      request = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "initialize",
+        params: {
+          protocolVersion: "2024-11-05",
+          capabilities: {},
+          clientInfo: { name: "café", version: "0.0.0" }
+        }
+      }
+      OmnifocusMcpSmokeHelpers.mcp_session(request)
+    end
+    let(:stdout) { stdio[0] }
+    let(:status) { stdio[2] }
+    let(:response) { OmnifocusMcpSmokeHelpers.json_responses(stdout).first }
+
+    it "exits cleanly" do
+      expect(status.exitstatus).to eq(0)
+    end
+
+    it "returns a JSON-RPC response" do
+      expect(response["jsonrpc"]).to eq("2.0")
+    end
+  end
 end
