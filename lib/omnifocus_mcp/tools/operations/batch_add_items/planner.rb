@@ -20,6 +20,7 @@ module OmnifocusMcp
           def prepare!
             mark_cycle_failures(cycle_messages: cycle_detector.detect)
             mark_unknown_parent_temp_id
+            self
           end
 
           # Stable order: by hierarchy_level (nil -> 0), then original index.

@@ -33,10 +33,10 @@ module OmnifocusMcp
         def call(items)
           batch_items = Array(items).map { |item| coerce_item(item) }
                                     .then { |coerced| build_batch_items(coerced) }
-          planner = Planner.new(batch_items).tap(&:prepare!)
 
           return OmnifocusMcp::Result.ok(batch_items.map(&:result)) if try_bulk_add!(batch_items:)
 
+          planner = Planner.new(batch_items).prepare!
           process_items(ordered: planner.processing_order, planner:)
           planner.finalize_unresolved!
 

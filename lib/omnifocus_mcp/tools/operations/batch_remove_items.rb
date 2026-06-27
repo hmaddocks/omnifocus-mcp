@@ -32,8 +32,10 @@ module OmnifocusMcp
 
         def coerce_item(item)
           case item
-          when Params::BatchRemoveItemParams then item
-          when Hash then Params::BatchRemoveItemParams.from_hash(item)
+          when Params::BatchRemoveItemParams
+            item
+          when Hash
+            Params::BatchRemoveItemParams.from_hash(item)
           else raise ArgumentError, "expected BatchRemoveItemParams or Hash, got #{item.class}"
           end
         end
