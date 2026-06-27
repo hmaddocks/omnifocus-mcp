@@ -49,15 +49,15 @@ module OmnifocusMcp
             parts << "has note: #{f["hasNote"]}" unless f["hasNote"].nil?
             parts << "inbox: #{f["inbox"]}"      unless f["inbox"].nil?
 
-            parts << format_on(label: "due", value: f["dueOn"]) unless f["dueOn"].nil?
-            parts << format_on(label: "defer", value: f["deferOn"]) unless f["deferOn"].nil?
-            parts << format_on(label: "planned", value: f["plannedOn"]) unless f["plannedOn"].nil?
+            parts << format_on(label: "due", value: f["dueOn"]) if f["dueOn"]
+            parts << format_on(label: "defer", value: f["deferOn"]) if f["deferOn"]
+            parts << format_on(label: "planned", value: f["plannedOn"]) if f["plannedOn"]
 
-            parts << "added within #{f["addedWithin"]} days" unless f["addedWithin"].nil?
-            parts << "added on day #{f["addedOn"]}" unless f["addedOn"].nil?
+            parts << "added within #{f["addedWithin"]} days" if f["addedWithin"]
+            parts << "added on day #{f["addedOn"]}" if f["addedOn"]
             parts << "repeating: #{f["isRepeating"]}" unless f["isRepeating"].nil?
-            parts << "completed within #{f["completedWithin"]} days" unless f["completedWithin"].nil?
-            parts << "completed on day #{f["completedOn"]}" unless f["completedOn"].nil?
+            parts << "completed within #{f["completedWithin"]} days" if f["completedWithin"]
+            parts << "completed on day #{f["completedOn"]}" if f["completedOn"]
 
             parts.join(", ")
           end

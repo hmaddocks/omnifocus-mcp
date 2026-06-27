@@ -18,6 +18,20 @@ RSpec.describe OmnifocusMcp::Tools::Presenters::QueryResults do
       end
     end
 
+    context "with boolean filters set to false" do
+      it "renders flagged: false" do
+        expect(described_class.format_filters(flagged: false)).to eq("flagged: false")
+      end
+
+      it "renders hasNote: false" do
+        expect(described_class.format_filters(hasNote: false)).to eq("has note: false")
+      end
+
+      it "renders isRepeating: false" do
+        expect(described_class.format_filters(isRepeating: false)).to eq("repeating: false")
+      end
+    end
+
     context "with named date filters" do
       subject(:result) { described_class.format_filters(filters) }
 
