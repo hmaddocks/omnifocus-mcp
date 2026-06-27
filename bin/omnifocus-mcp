@@ -1,7 +1,15 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Keep in sync with OmnifocusMcp::VERSION_ARGS in lib/omnifocus_mcp/version.rb.
+VERSION_ARGS = %w[--version -v version].freeze
+
+if ARGV.intersect?(VERSION_ARGS)
+  require "omnifocus_mcp/version"
+  puts OmnifocusMcp::VERSION
+  exit 0
+end
+
 require "bundler/setup"
 require "omnifocus_mcp"
-
-OmnifocusMcp::Mcp.start
+OmnifocusMcp::Cli.run

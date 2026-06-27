@@ -41,6 +41,26 @@ RSpec.describe OmnifocusMcp::Mcp do
     end
   end
 
+  describe ".start" do
+    subject(:start) { described_class.start }
+
+    let(:server) { instance_double(FastMcp::Server, start: nil) }
+
+    before do
+      allow(described_class).to receive(:build_server).and_return(server)
+    end
+
+    it "logs the server version to stderr" do
+      expect { start }.to output(/Starting OmniFocus MCP v#{Regexp.escape(OmnifocusMcp::VERSION)}/).to_stderr
+    end
+
+    it "starts the built server" do
+      start
+
+      expect(server).to have_received(:start)
+    end
+  end
+
   describe ".build_server" do
     context "when configuring the FastMcp server" do
       it "returns a FastMcp::Server" do

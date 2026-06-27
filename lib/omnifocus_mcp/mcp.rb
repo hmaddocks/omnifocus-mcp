@@ -41,7 +41,10 @@ module OmnifocusMcp
       end
     end
 
-    def start = build_server.start
+    def start
+      OmnifocusMcp.logger.warn("Starting #{server_name} v#{server_version}")
+      build_server.start
+    end
 
     private
 

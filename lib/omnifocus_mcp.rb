@@ -100,3 +100,4 @@ require_relative "omnifocus_mcp/resources/today_resource"
 
 # MCP bootstrap depends on everything above.
 require_relative "omnifocus_mcp/mcp"
+require_relative "omnifocus_mcp/cli"

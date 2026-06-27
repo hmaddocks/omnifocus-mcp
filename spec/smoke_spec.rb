@@ -9,8 +9,8 @@ module OmnifocusMcpSmokeHelpers
 
   module_function
 
-  def run_mcp(stdin_data)
-    Open3.capture3(GEMFILE_ENV, "bundle", "exec", BIN_PATH, stdin_data: stdin_data)
+  def run_mcp(stdin_data, *args)
+    Open3.capture3(GEMFILE_ENV, "bundle", "exec", BIN_PATH, *args, stdin_data: stdin_data)
   end
 
   def json_responses(stdout)
@@ -56,6 +56,44 @@ RSpec.describe "omnifocus-mcp executable" do
     end
   end
 
+  context "when invoked with a version argument" do
+    let(:stdout) { stdio[0] }
+    let(:stderr) { stdio[1] }
+    let(:status) { stdio[2] }
+
+    shared_examples "a version-only invocation" do
+      it "prints the gem version to stdout" do
+        expect(stdout).to eq("#{OmnifocusMcp::VERSION}\n")
+      end
+
+      it "exits cleanly" do
+        expect(status.exitstatus).to eq(0)
+      end
+
+      it "does not start the MCP server" do
+        expect(stderr).not_to include("Starting OmniFocus MCP")
+      end
+    end
+
+    context "with --version" do
+      subject(:stdio) { OmnifocusMcpSmokeHelpers.run_mcp("", "--version") }
+
+      include_examples "a version-only invocation"
+    end
+
+    context "with -v" do
+      subject(:stdio) { OmnifocusMcpSmokeHelpers.run_mcp("", "-v") }
+
+      include_examples "a version-only invocation"
+    end
+
+    context "with version" do
+      subject(:stdio) { OmnifocusMcpSmokeHelpers.run_mcp("", "version") }
+
+      include_examples "a version-only invocation"
+    end
+  end
+
   context "when sent an MCP initialize request over stdio" do
     subject(:stdio) { OmnifocusMcpSmokeHelpers.run_mcp(stdin_data) }
 
@@ -87,6 +125,10 @@ RSpec.describe "omnifocus-mcp executable" do
 
     it "returns the server version" do
       expect(response.dig("result", "serverInfo", "version")).to eq(OmnifocusMcp::Mcp.server_version)
+    end
+
+    it "logs the server version to stderr on startup" do
+      expect(stderr).to include("Starting OmniFocus MCP v#{OmnifocusMcp::VERSION}")
     end
   end
 
