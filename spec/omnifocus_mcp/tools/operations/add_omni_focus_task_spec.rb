@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "omnifocus_mcp/tools/operations/add_omnifocus_task"
+require "omnifocus_mcp/tools/operations/add_omni_focus_task"
 
 RSpec.describe OmnifocusMcp::Tools::Operations::AddOmniFocusTask do
   describe ".call" do

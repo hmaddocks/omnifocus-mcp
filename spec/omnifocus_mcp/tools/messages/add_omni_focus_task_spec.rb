@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "omnifocus_mcp/tools/messages/add_omnifocus_task"
+require "omnifocus_mcp/tools/messages/add_omni_focus_task"
 
 RSpec.describe OmnifocusMcp::Tools::Messages::AddOmniFocusTask do
   describe ".success" do

@@ -3,7 +3,7 @@
 require_relative "../../infrastructure/script_runner"
 require_relative "../../result"
 require_relative "../params"
-require_relative "add_omnifocus_task"
+require_relative "add_omni_focus_task"
 require_relative "add_project"
 require_relative "batch_add_items/planner"
 require_relative "batch_add_items/batch_item"

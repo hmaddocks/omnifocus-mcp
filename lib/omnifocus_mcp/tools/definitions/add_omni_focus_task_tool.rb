@@ -4,14 +4,14 @@ require "fast_mcp"
 
 require_relative "mcp_envelope"
 require_relative "operation_factory"
-require_relative "../messages/add_omnifocus_task"
-require_relative "../operations/add_omnifocus_task"
+require_relative "../messages/add_omni_focus_task"
+require_relative "../operations/add_omni_focus_task"
 require_relative "../params"
 
 module OmnifocusMcp
   module Tools
     module Definitions
-      # `FastMcp::Tool` for `add_omnifocus_task`.
+      # `FastMcp::Tool` for `add_omni_focus_task`.
       class AddOmniFocusTaskTool < FastMcp::Tool
         tool_name "add_omnifocus_task"
         description "Add a new task to OmniFocus"

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "omnifocus_mcp/tools/generators/add_omnifocus_task"
+require "omnifocus_mcp/tools/generators/add_omni_focus_task"
 
 RSpec.describe OmnifocusMcp::Tools::Generators::AddOmniFocusTask do
   describe ".generate_apple_script" do

@@ -3,7 +3,7 @@
 require_relative "../../infrastructure/script_runner"
 require_relative "../../parsers/apple_script_envelope"
 require_relative "../../result"
-require_relative "../generators/add_omnifocus_task"
+require_relative "../generators/add_omni_focus_task"
 require_relative "../params"
 
 module OmnifocusMcp
