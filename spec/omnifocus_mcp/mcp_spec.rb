@@ -51,7 +51,7 @@ RSpec.describe OmnifocusMcp::Mcp do
     end
 
     it "logs the server version to stderr" do
-      expect { start }.to output(/Starting OmniFocus MCP v#{Regexp.escape(OmnifocusMcp::VERSION)}/).to_stderr
+      expect { start }.to output(/Starting OmniFocus MCP v#{Regexp.escape(OmnifocusMcp::VERSION)}/o).to_stderr
     end
 
     it "starts the built server" do
