@@ -39,5 +39,12 @@ RSpec.describe OmnifocusMcp::Tools::Generators::DatabaseStats do
     it "embeds the since timestamp" do
       expect(script).to include('new Date("2026-05-22T09:30:00Z")')
     end
+
+    it "escapes special characters in the since timestamp" do
+      malicious_input = "2026-05-22T09:30:00Z\"); malicious();//"
+      script = described_class.changes_script(malicious_input)
+
+      expect(script).to include('new Date("2026-05-22T09:30:00Z\"); malicious();//")')
+    end
   end
 end

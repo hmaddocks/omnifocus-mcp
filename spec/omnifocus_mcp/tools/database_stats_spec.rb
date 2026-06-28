@@ -143,15 +143,6 @@ RSpec.describe OmnifocusMcp::Tools::DatabaseStats do
       end
     end
 
-    context "when building the changes script" do
-      it "escapes special characters in a string since timestamp" do
-        malicious_input = "2026-05-22T09:30:00Z\"); malicious();//"
-        script = described_class.changes_script(malicious_input)
-
-        expect(script).to include('new Date("2026-05-22T09:30:00Z\"); malicious();//")')
-      end
-    end
-
     context "when the OmniJS script returns an error envelope" do
       subject(:result) do
         OmnifocusMcp::Utils::ScriptExecution.runner = lambda { |*_argv|

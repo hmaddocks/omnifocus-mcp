@@ -43,12 +43,10 @@ module OmnifocusMcp
             params = Params::McpBoundary.coerce(Params::EditItemParams, params)
             return missing_identifier_error if Utils::Blank.blank?(params.id, params.name)
 
-            id = Infrastructure::AppleScript.escape(params.id.to_s)
             name = Infrastructure::AppleScript.escape(params.name.to_s)
             item_type = params.item_type.to_s
-
+            id = Infrastructure::AppleScript.escape(params.id.to_s)
             date_pre_scripts, date_assignments = collect_date_assignments(params)
-
             [
               date_pre_scripts.join("\n\n"),
               Infrastructure::AppleScript.tell_document(document_body(item_type, id, name, params, date_assignments))
