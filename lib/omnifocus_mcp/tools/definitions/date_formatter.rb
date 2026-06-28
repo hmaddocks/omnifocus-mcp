@@ -24,13 +24,11 @@ module OmnifocusMcp
           private
 
           def us_short_date(date)
-            # TODO: Fix the formatting. Make Rubocop happy
-            format("%d/%d/%d", date.month, date.day, date.year)
+            format("%<month>d/%<day>d/%<year>d", month: date.month, day: date.day, year: date.year)
           end
 
           def us_compact_date(date)
-            # TODO: Fix the formatting. Make Rubocop happy
-            format("%d/%d", date.month, date.day)
+            format("%<month>d/%<day>d", month: date.month, day: date.day)
           end
 
           def format_parsed(iso)
