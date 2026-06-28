@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "omnifocus_mcp/tools/definitions/add_omnifocus_task_tool"
+require "omnifocus_mcp/tools/definitions/add_omni_focus_task_tool"
 
 RSpec.describe OmnifocusMcp::Tools::Definitions::AddOmniFocusTaskTool do
   let(:created) { OmnifocusMcp::Tools::Operations::AddOmniFocusTask::Created }

@@ -78,7 +78,7 @@ require_relative "omnifocus_mcp/tools/messages/list_tools"
 require_relative "omnifocus_mcp/tools/messages/remove_item"
 
 # Tool definitions wrap primitives for MCP exposure.
-require_relative "omnifocus_mcp/tools/definitions/add_omnifocus_task_tool"
+require_relative "omnifocus_mcp/tools/definitions/add_omni_focus_task_tool"
 require_relative "omnifocus_mcp/tools/definitions/add_project_tool"
 require_relative "omnifocus_mcp/tools/definitions/batch_add_items_tool"
 require_relative "omnifocus_mcp/tools/definitions/batch_remove_items_tool"
