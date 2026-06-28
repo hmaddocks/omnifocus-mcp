@@ -84,25 +84,24 @@ module OmnifocusMcp
           # Build the full JXA query script for the given params.
           def generate_query_script(params)
             params = Params::McpBoundary.coerce(Params::QueryOmnifocusParams, params)
-            entity = params.entity.to_s
-            filters = params.filters || {}
-            fields = params.fields
-            limit = params.limit
-            sort_by = params.sort_by
-            sort_order = params.sort_order
-            include_completed = params.include_completed == true
-            summary = params.summary == true
 
+            entity = params.entity.to_s
+
+            filters = params.filters || {}
             filter_conditions = generate_filter_conditions(entity:, filters:)
-            field_mapping = generate_field_mapping(entity, fields:)
-            sort_property = resolve_sort_field(sort_by)
-            sort_logic = sort_property ? generate_sort_logic(sort_property, sort_order:) : ""
+
+            field_mapping = generate_field_mapping(entity:, fields: params.fields)
+
+            sort_property = resolve_sort_field(params.sort_by)
+            sort_logic = sort_property ? generate_sort_logic(sort_property, sort_order: params.sort_order) : ""
+
+            limit = params.limit
             limit_logic = limit.is_a?(Integer) && limit.positive? ? "filtered = filtered.slice(0, #{limit});" : ""
 
             build_query_script(
               entity: entity,
-              include_completed: include_completed,
-              summary: summary,
+              include_completed: params.include_completed == true,
+              summary: params.summary == true,
               filter_conditions: filter_conditions,
               field_mapping: field_mapping,
               sort_logic: sort_logic,
@@ -159,7 +158,7 @@ module OmnifocusMcp
           # Build the per-item field-projection block. With no `fields` array
           # (nil or empty), returns the default field set for the entity.
           # Otherwise builds explicit mappings for each requested field.
-          def generate_field_mapping(entity, fields: nil)
+          def generate_field_mapping(entity:, fields: nil)
             if fields.nil? || fields.empty?
               return default_task_mapping if entity == "tasks"
               return default_project_mapping if entity == "projects"
@@ -233,10 +232,7 @@ module OmnifocusMcp
 
           def apply_tag_status_filters(filters:, conditions:, entity:)
             if entity == "tasks" && filters[:tags] && !filters[:tags].empty?
-              tag_condition = filters[:tags].map do |tag|
-                %(item.tags.some(t => t.name === "#{escape_jxa(tag)}"))
-              end.join(" || ")
-              conditions << "if (!(#{tag_condition})) return false;"
+              conditions << tag_filter_condition(filters[:tags])
             end
 
             return unless filters[:status] && !filters[:status].empty?
@@ -250,6 +246,13 @@ module OmnifocusMcp
             conditions << "if (!(#{status_condition})) return false;"
           end
 
+          def tag_filter_condition(tags)
+            tag_condition = tags.map do |tag|
+              %(item.tags.some(t => t.name === "#{escape_jxa(tag)}"))
+            end.join(" || ")
+            "if (!(#{tag_condition})) return false;"
+          end
+
           def apply_task_date_filters(filters:, conditions:)
             conditions << "if (item.flagged !== #{filters[:flagged]}) return false;" unless filters[:flagged].nil?
 
@@ -260,12 +263,11 @@ module OmnifocusMcp
             push_same_day(conditions:, field: "dueDate", value: filters[:due_on])
             push_same_day(conditions:, field: "deferDate", value: filters[:defer_on])
             push_same_day(conditions:, field: "plannedDate", value: filters[:planned_on])
+            push_same_day(conditions:, field: "added", value: filters[:added_on])
+            push_same_day(conditions:, field: "completionDate", value: filters[:completed_on])
 
             push_within_past(conditions:, field: "added", value: filters[:added_within])
-            push_same_day(conditions:, field: "added", value: filters[:added_on])
-
             push_within_past(conditions:, field: "completionDate", value: filters[:completed_within])
-            push_same_day(conditions:, field: "completionDate", value: filters[:completed_on])
           end
 
           def apply_task_misc_filters(filters:, conditions:)
