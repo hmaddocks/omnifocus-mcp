@@ -11,6 +11,7 @@ module OmnifocusMcp
       # Exposes `format_tasks`, `format_projects`, `format_folders`,
       # `format_query_results`, `format_filters`. Used by
       # {Definitions::QueryOmnifocusTool} to build the user-facing text reply.
+      # rubocop:disable Metrics
       module QueryResults
         class << self
           def format_query_results(items:, entity:, filters: nil)
@@ -178,6 +179,7 @@ module OmnifocusMcp
           end
         end
       end
+      # rubocop:enable Metrics
     end
   end
 end

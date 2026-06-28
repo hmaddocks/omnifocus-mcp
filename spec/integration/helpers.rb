@@ -9,7 +9,7 @@ module OmnifocusMcp
   # manage real OmniFocus entities. All write operations refuse to act on
   # items that don't start with `TEST_PREFIX` so the suite cannot
   # accidentally clobber real data.
-  #
+  # rubocop:disable Metrics
   module IntegrationHelpers
     TEST_PREFIX = "TEST:"
     APPLE_EVENTS_DENIED_PATTERN = /Not authori[sz]ed to send Apple events to OmniFocus|\(-1743\)/i
@@ -168,4 +168,5 @@ module OmnifocusMcp
       APPLE_EVENTS_DENIED_PATTERN.match?(stderr.to_s)
     end
   end
+  # rubocop:enable Metrics
 end
