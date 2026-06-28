@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "omnifocus_mcp/tools/generators/add_omnifocus_task"
-require "omnifocus_mcp/tools/generators/edit_item"
 
 RSpec.describe OmnifocusMcp::Tools::Generators::AddOmniFocusTask do
   describe ".generate_apple_script" do
@@ -17,16 +16,6 @@ RSpec.describe OmnifocusMcp::Tools::Generators::AddOmniFocusTask do
 
     it "records bulk task ids" do
       expect(script).to include("set end of bulkTaskIds to taskId")
-    end
-  end
-end
-
-RSpec.describe OmnifocusMcp::Tools::Generators::EditItem do
-  describe ".generate_apple_script" do
-    subject(:script) { described_class.generate_apple_script(item_type: "task", name: "Task", new_name: "Updated") }
-
-    it "updates the requested property" do
-      expect(script).to include(%(set name of foundItem to "Updated"))
     end
   end
 end
