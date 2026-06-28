@@ -7,7 +7,7 @@ RSpec.describe OmnifocusMcp::Tools::Operations::EditItem do
     subject(:result) { described_class.call({ item_type: "task", name: "Task", new_name: "Updated" }, script_runner:) }
 
     let(:script_runner) do
-      TaskEditRunnerSpy.new(stdout: '{"success":true,"id":"abc","name":"Task","changedProperties":"name"}')
+      AppleScriptRunnerSpy.new(stdout: '{"success":true,"id":"abc","name":"Task","changedProperties":"name"}')
     end
 
     it "returns the changed properties" do
@@ -18,26 +18,5 @@ RSpec.describe OmnifocusMcp::Tools::Operations::EditItem do
       result
       expect(script_runner.scripts.first).to include(%(set name of foundItem to "Updated"))
     end
-  end
-end
-
-class TaskEditRunnerSpy
-  attr_reader :scripts
-
-  def initialize(stdout:, stderr: "", status: nil)
-    @stdout = stdout
-    @stderr = stderr
-    @status = status || SuccessfulStatus.new
-    @scripts = []
-  end
-
-  def execute_applescript(script)
-    @scripts << script
-    [@stdout, @stderr, @status]
-  end
-
-  class SuccessfulStatus
-    def success? = true
-    def exitstatus = 0
   end
 end
