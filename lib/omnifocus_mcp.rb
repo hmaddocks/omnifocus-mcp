@@ -22,7 +22,6 @@ require_relative "omnifocus_mcp/utils/apple_script_envelope"
 require_relative "omnifocus_mcp/utils/apple_script_helpers"
 require_relative "omnifocus_mcp/utils/blank"
 require_relative "omnifocus_mcp/utils/date_filter"
-require_relative "omnifocus_mcp/utils/date_formatting"
 require_relative "omnifocus_mcp/utils/iso_date"
 require_relative "omnifocus_mcp/utils/script_execution"
 
