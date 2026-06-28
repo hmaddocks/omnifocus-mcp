@@ -9,8 +9,8 @@ module OmnifocusMcpSmokeHelpers
 
   module_function
 
-  def run_mcp(stdin_data, *args)
-    Open3.capture3(GEMFILE_ENV, "bundle", "exec", BIN_PATH, *args, stdin_data: stdin_data)
+  def run_mcp(stdin_data, *)
+    Open3.capture3(GEMFILE_ENV, "bundle", "exec", BIN_PATH, *, stdin_data: stdin_data)
   end
 
   def json_responses(stdout)
@@ -78,19 +78,19 @@ RSpec.describe "omnifocus-mcp executable" do
     context "with --version" do
       subject(:stdio) { OmnifocusMcpSmokeHelpers.run_mcp("", "--version") }
 
-      include_examples "a version-only invocation"
+      it_behaves_like "a version-only invocation"
     end
 
     context "with -v" do
       subject(:stdio) { OmnifocusMcpSmokeHelpers.run_mcp("", "-v") }
 
-      include_examples "a version-only invocation"
+      it_behaves_like "a version-only invocation"
     end
 
     context "with version" do
       subject(:stdio) { OmnifocusMcpSmokeHelpers.run_mcp("", "version") }
 
-      include_examples "a version-only invocation"
+      it_behaves_like "a version-only invocation"
     end
   end
 
