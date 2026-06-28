@@ -61,10 +61,10 @@ require_relative "omnifocus_mcp/tools/presenters/list_perspectives"
 require_relative "omnifocus_mcp/tools/presenters/list_tags"
 require_relative "omnifocus_mcp/tools/presenters/perspective_view"
 require_relative "omnifocus_mcp/tools/presenters/query_reply"
-require_relative "omnifocus_mcp/tools/batch_report"
+
 require_relative "omnifocus_mcp/tools/database_stats"
 require_relative "omnifocus_mcp/tools/presenters/query_results"
-require_relative "omnifocus_mcp/tools/query_omnifocus_formatter"
+
 require_relative "omnifocus_mcp/tools/query_statuses"
 require_relative "omnifocus_mcp/tools/definitions/date_formatter"
 require_relative "omnifocus_mcp/tools/definitions/key_normalizer"
