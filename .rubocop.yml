@@ -8,6 +8,8 @@ plugins:
 AllCops:
   TargetRubyVersion: 3.4
   NewCops: enable
+  Exclude:
+    - spec/integration/**/*
 
 Metrics/BlockLength:
   Exclude:
