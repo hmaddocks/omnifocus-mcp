@@ -1,7 +1,7 @@
 # omnifocus-mcp (Ruby)
 
-`omnifocus-mcp` is a Ruby MCP server that lets LLM clients (Claude Desktop, MCP
-Inspector, etc.) work with OmniFocus on macOS over stdio. It exposes tools and
+`omnifocus-mcp` is a Ruby MCP server that lets LLM clients (Claude Code / Desktop,
+Cursor, Zed, etc.) work with OmniFocus on macOS over stdio. It exposes tools and
 resources for creating, editing, removing, querying, and reporting on OmniFocus
 tasks, projects, perspectives, and tags.
 
@@ -60,21 +60,9 @@ This tool was heavily inspired by [OmniFocus MCP Server](https://github.com/them
 gem install omnifocus-mcp
 ```
 
-## Run
-
-```sh
-omnifocus-mcp
-```
-
-The server speaks MCP over stdio. Test it with the MCP inspector:
-
-```sh
-npx @modelcontextprotocol/inspector omnifocus-mcp
-```
-
 ## Configure an MCP Client
 
-After installing the executable, add this server to any MCP client that supports
+After installing the executable, add this config to any MCP client that supports
 stdio servers:
 
 ```json
@@ -93,7 +81,7 @@ stdio servers:
 This server uses [fast-mcp](https://github.com/yjacquin/fast-mcp) 1.6, which
 does not currently expose MCP server instructions during client initialization.
 To give an MCP client better guidance, copy the instructions below into a skill,
-rule, your project's `AGENTS.md`, or another client-specific instruction file.
+rule, your project's `AGENTS.md`, or your client-specific instruction file.
 
 ```text
 OmniFocus MCP server for macOS task management.
@@ -145,3 +133,6 @@ If a run is killed mid-flight, you can sweep leftover items with:
 ```sh
 bundle exec ruby spec/integration/cleanup.rb
 ```
+
+You should backup your OmniFocus database before using this tool. Refer to the
+warranty information in the LICENSE.
