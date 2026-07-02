@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [1.0.2]
+
+- Remove `bundler/setup` from the executable so the gem runs correctly when
+  installed outside a Bundler-managed environment
+- Refactor database stats generator to eliminate circular logic
+- Remove unused `BatchReport` and `QueryOmnifocusFormatter` classes
+- Reorganise spec suite into per-class files
 
 ## [1.0.1] - 2026-06-27
 
