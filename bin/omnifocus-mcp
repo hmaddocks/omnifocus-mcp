@@ -10,6 +10,5 @@ if ARGV.intersect?(VERSION_ARGS)
   exit 0
 end
 
-require "bundler/setup"
 require "omnifocus_mcp"
 OmnifocusMcp::Cli.run

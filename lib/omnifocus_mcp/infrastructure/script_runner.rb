@@ -24,15 +24,12 @@ module OmnifocusMcp
 
       class << self
         def default = @default ||= new
+        def reset! = @default = new
 
         def runner = default.runner
 
         def runner=(runner)
           default.runner = runner
-        end
-
-        def reset!
-          @default = new
         end
 
         def execute_jxa(script) = default.execute_jxa(script)
