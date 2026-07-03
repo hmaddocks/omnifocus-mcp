@@ -60,9 +60,15 @@ This tool was heavily inspired by [OmniFocus MCP Server](https://github.com/them
 gem install omnifocus-mcp
 ```
 
-## Configure an MCP Client
+## Install in Claude Code
 
-After installing the executable, add this config to any MCP client that supports
+```sh
+claude mcp add --transport stdio --scope user omnifocus -- omnifocus-mcp
+```
+
+## Configure other MCP Clients
+
+After installing the executable, add this server to any MCP client that supports
 stdio servers:
 
 ```json
