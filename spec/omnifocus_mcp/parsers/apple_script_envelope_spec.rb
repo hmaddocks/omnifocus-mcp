@@ -33,7 +33,7 @@ RSpec.describe OmnifocusMcp::Parsers::AppleScriptEnvelope do
     end
 
     it "includes a parse failure diagnostic" do
-      expect(parse.error).to match(/Failed to parse AppleScript result/)
+      expect(parse.error).to include("Failed to parse AppleScript result")
     end
   end
 

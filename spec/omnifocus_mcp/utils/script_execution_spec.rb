@@ -158,7 +158,7 @@ RSpec.describe OmnifocusMcp::Utils::ScriptExecution do
       end
 
       it "returns a parse error instead of silently treating it as empty results" do
-        expect(result.error).to match(/Failed to parse script output/)
+        expect(result.error).to include("Failed to parse script output")
       end
 
       it "includes the raw stdout preview in the parse error" do
@@ -172,7 +172,7 @@ RSpec.describe OmnifocusMcp::Utils::ScriptExecution do
       end
 
       it "returns a parse error" do
-        expect(result.error).to match(/Failed to parse script output/)
+        expect(result.error).to include("Failed to parse script output")
       end
     end
 
@@ -184,7 +184,7 @@ RSpec.describe OmnifocusMcp::Utils::ScriptExecution do
       end
 
       it "returns an exit error" do
-        expect(result.error).to match(/osascript failed \(exit 1\)/)
+        expect(result.error).to include("osascript failed (exit 1)")
       end
 
       it "includes stderr in the error" do
@@ -350,7 +350,7 @@ RSpec.describe OmnifocusMcp::Utils::ScriptExecution do
       end
 
       it "returns a parse error" do
-        expect(result.error).to match(/Failed to parse script output/)
+        expect(result.error).to include("Failed to parse script output")
       end
 
       it "includes the raw stdout preview in the parse error" do
@@ -564,7 +564,7 @@ RSpec.describe OmnifocusMcp::Utils::ScriptExecution do
       end
 
       it "returns a timeout message on stderr" do
-        expect(stderr).to match(/osascript timed out after 0\.1s/)
+        expect(stderr).to include("osascript timed out after 0.1s")
       end
 
       it "returns a failed status" do
@@ -586,7 +586,7 @@ RSpec.describe OmnifocusMcp::Utils::ScriptExecution do
       end
 
       it "surfaces the timeout message" do
-        expect(result.error).to match(/osascript timed out after 0\.1s/)
+        expect(result.error).to include("osascript timed out after 0.1s")
       end
     end
 
@@ -611,7 +611,7 @@ RSpec.describe OmnifocusMcp::Utils::ScriptExecution do
       end
 
       it "surfaces the timeout message" do
-        expect(stderr).to match(/osascript timed out after 0\.1s/)
+        expect(stderr).to include("osascript timed out after 0.1s")
       end
 
       it "returns a failed status" do
