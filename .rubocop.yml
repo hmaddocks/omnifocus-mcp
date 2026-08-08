@@ -7,6 +7,7 @@ plugins:
 
 AllCops:
   TargetRubyVersion: 3.4
+  UseProjectIndex: true
   NewCops: enable
   Exclude:
     - spec/integration/**/*

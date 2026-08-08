@@ -14,5 +14,6 @@ group :development, :test do
   gem "rubocop-rake"
   gem "rubocop-rspec"
   gem "rubocop-thread_safety"
+  gem "rubydex", require: false
   gem "ruby-lsp"
 end
