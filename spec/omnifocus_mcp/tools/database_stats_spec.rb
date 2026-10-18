@@ -10,14 +10,14 @@ RSpec.describe OmnifocusMcp::Tools::DatabaseStats do
 
   after  { OmnifocusMcp::Utils::ScriptExecution.reset! }
 
-  describe ".get_database_stats" do
+  describe ".database_stats" do
     context "when the OmniJS script succeeds" do
       subject(:result) do
         OmnifocusMcp::Utils::ScriptExecution.runner = lambda { |*_argv|
           [JSON.generate(stats_payload), "", success_status]
         }
 
-        described_class.get_database_stats
+        described_class.database_stats
       end
 
       let(:stats_payload) do
@@ -63,7 +63,7 @@ RSpec.describe OmnifocusMcp::Tools::DatabaseStats do
           [JSON.generate(error: "boom"), "", success_status]
         }
 
-        described_class.get_database_stats
+        described_class.database_stats
       end
 
       it "returns Result.error with the script error message" do
@@ -77,7 +77,7 @@ RSpec.describe OmnifocusMcp::Tools::DatabaseStats do
           ["not json", "osascript failed", failure_status]
         }
 
-        described_class.get_database_stats
+        described_class.database_stats
       end
 
       it "returns Result.error" do

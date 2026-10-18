@@ -12,7 +12,7 @@ module OmnifocusMcp
       description "Quick OmniFocus database statistics overview"
 
       def payload
-        Tools::Operations::DatabaseStats.get_database_stats.fold(
+        Tools::Operations::DatabaseStats.database_stats.fold(
           on_ok: ->(stats) { snake_case_keys(stats || {}) },
           on_error: ->(err) { { error: err } }
         )

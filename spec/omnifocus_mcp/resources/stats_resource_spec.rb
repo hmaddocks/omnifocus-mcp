@@ -59,12 +59,12 @@ RSpec.describe OmnifocusMcp::Resources::StatsResource do
 
     context "when DatabaseStats succeeds" do
       before do
-        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:get_database_stats)
+        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:database_stats)
           .and_return(OmnifocusMcp::Result.ok(stats))
       end
 
-      it "delegates to get_database_stats" do
-        expect(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:get_database_stats)
+      it "delegates to database_stats" do
+        expect(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:database_stats)
           .and_return(OmnifocusMcp::Result.ok(stats))
 
         payload
@@ -101,7 +101,7 @@ RSpec.describe OmnifocusMcp::Resources::StatsResource do
       end
 
       before do
-        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:get_database_stats)
+        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:database_stats)
           .and_return(successful_with_nil_stats)
       end
 
@@ -112,7 +112,7 @@ RSpec.describe OmnifocusMcp::Resources::StatsResource do
 
     context "when DatabaseStats fails" do
       before do
-        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:get_database_stats)
+        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:database_stats)
           .and_return(OmnifocusMcp::Result.error("boom"))
       end
 
@@ -127,7 +127,7 @@ RSpec.describe OmnifocusMcp::Resources::StatsResource do
 
     context "when DatabaseStats succeeds" do
       before do
-        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:get_database_stats)
+        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:database_stats)
           .and_return(OmnifocusMcp::Result.ok(stats))
       end
 
@@ -146,7 +146,7 @@ RSpec.describe OmnifocusMcp::Resources::StatsResource do
       end
 
       before do
-        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:get_database_stats)
+        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:database_stats)
           .and_return(successful_with_nil_stats)
       end
 
@@ -157,7 +157,7 @@ RSpec.describe OmnifocusMcp::Resources::StatsResource do
 
     context "when DatabaseStats fails" do
       before do
-        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:get_database_stats)
+        allow(OmnifocusMcp::Tools::Operations::DatabaseStats).to receive(:database_stats)
           .and_return(OmnifocusMcp::Result.error("boom"))
       end
 

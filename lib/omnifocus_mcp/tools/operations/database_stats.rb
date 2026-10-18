@@ -9,8 +9,8 @@ module OmnifocusMcp
     module Operations
       class DatabaseStats
         class << self
-          def get_database_stats(script_runner: Infrastructure::ScriptRunner)
-            new(script_runner:).get_database_stats
+          def database_stats(script_runner: Infrastructure::ScriptRunner)
+            new(script_runner:).database_stats
           end
 
           def get_changes_since(since, script_runner: Infrastructure::ScriptRunner)
@@ -23,7 +23,7 @@ module OmnifocusMcp
           @generator = generator
         end
 
-        def get_database_stats
+        def database_stats
           script_payload_result(script_runner.execute_omnifocus_source(generator.stats_script))
         end
 

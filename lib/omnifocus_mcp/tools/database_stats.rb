@@ -6,14 +6,14 @@ module OmnifocusMcp
     # full OmniFocus dataset.
     #
     # Provides:
-    #   * {.get_database_stats} — counts + last-modified timestamp
+    #   * {.database_stats} — counts + last-modified timestamp
     #   * {.get_changes_since}  — incremental change feed since a timestamp
     module DatabaseStats
       class << self
-        def get_database_stats
+        def database_stats
           require_relative "operations/database_stats"
 
-          Operations::DatabaseStats.get_database_stats
+          Operations::DatabaseStats.database_stats
         end
 
         # Incremental change feed since `since` (a Time, DateTime, or ISO string).

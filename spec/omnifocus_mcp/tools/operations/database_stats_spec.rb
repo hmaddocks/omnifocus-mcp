@@ -3,8 +3,8 @@
 require "omnifocus_mcp/tools/operations/database_stats"
 
 RSpec.describe OmnifocusMcp::Tools::Operations::DatabaseStats do
-  describe ".get_database_stats" do
-    subject(:result) { described_class.get_database_stats(script_runner:) }
+  describe ".database_stats" do
+    subject(:result) { described_class.database_stats(script_runner:) }
 
     let(:script_runner) { QueryStackRunnerSpy.new(response: { "taskCount" => 12 }) }
 
