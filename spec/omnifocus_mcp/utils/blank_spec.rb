@@ -117,4 +117,32 @@ RSpec.describe OmnifocusMcp::Utils::Blank do
       end
     end
   end
+
+  describe ".present?" do
+    subject(:present) { described_class.present?(value) }
+
+    context "when value is nil" do
+      let(:value) { nil }
+
+      it "is false" do
+        expect(present).to be false
+      end
+    end
+
+    context "when value is an empty string" do
+      let(:value) { "" }
+
+      it "is false" do
+        expect(present).to be false
+      end
+    end
+
+    context "when value is a non-empty string" do
+      let(:value) { "hello" }
+
+      it "is true" do
+        expect(present).to be true
+      end
+    end
+  end
 end

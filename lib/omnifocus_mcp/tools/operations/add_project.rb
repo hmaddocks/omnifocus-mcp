@@ -51,7 +51,7 @@ module OmnifocusMcp
         def run_script(script)
           stdout, stderr, status = script_runner.execute_applescript(script)
 
-          OmnifocusMcp.logger.warn("[add_project] AppleScript stderr: #{stderr}") if stderr && !stderr.empty?
+          OmnifocusMcp.logger.warn("[add_project] AppleScript stderr: #{stderr}") if Utils::Blank.present?(stderr)
           return OmnifocusMcp::Result.error(applescript_run_failure(stderr:, status:)) unless status.success?
 
           parse_result(stdout)
@@ -66,7 +66,7 @@ module OmnifocusMcp
         def applescript_run_failure(stderr:, status:)
           exit_code = status.respond_to?(:exitstatus) ? status.exitstatus : status
           message = "osascript failed (exit #{exit_code})"
-          message += ": #{stderr.strip}" unless stderr.nil? || stderr.empty?
+          message += ": #{stderr.strip}" unless Utils::Blank.blank?(stderr)
           message
         end
       end

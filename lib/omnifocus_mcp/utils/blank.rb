@@ -21,6 +21,10 @@ module OmnifocusMcp
 
         values.all? { |v| v.to_s.empty? }
       end
+
+      def present?(value)
+        !blank?(value)
+      end
     end
   end
 end

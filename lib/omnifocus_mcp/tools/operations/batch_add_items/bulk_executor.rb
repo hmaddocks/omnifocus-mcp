@@ -57,7 +57,7 @@ module OmnifocusMcp
             private
 
             def log_stderr(stderr)
-              return if stderr.nil? || stderr.empty?
+              return if Utils::Blank.blank?(stderr)
 
               OmnifocusMcp.logger.warn("[batch_add_items] AppleScript stderr: #{stderr}")
             end

@@ -175,7 +175,9 @@ module OmnifocusMcp
           stdout, stderr, status = runner.call("osascript", "-l", "JavaScript", path)
           return Result.error(format_run_failure(stderr, status)) unless status.success?
 
-          OmnifocusMcp.logger.warn("[script_execution] Script stderr output: #{stderr}") if stderr && !stderr.empty?
+          if Utils::Blank.present?(stderr)
+            OmnifocusMcp.logger.warn("[script_execution] Script stderr output: #{stderr}")
+          end
           Result.ok(stdout)
         end
       rescue StandardError => e
@@ -185,7 +187,7 @@ module OmnifocusMcp
       def format_run_failure(stderr, status)
         exit_code = status.respond_to?(:exitstatus) ? status.exitstatus : status
         message = "osascript failed (exit #{exit_code})"
-        message += ": #{stderr.strip}" unless stderr.nil? || stderr.empty?
+        message += ": #{stderr.strip}" unless Utils::Blank.blank?(stderr)
         message
       end
 
