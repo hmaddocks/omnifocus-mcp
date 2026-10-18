@@ -231,9 +231,7 @@ module OmnifocusMcp
           # rubocop:enable Metrics/MethodLength
 
           def apply_tag_status_filters(filters:, conditions:, entity:)
-            if entity == "tasks" && filters[:tags] && !filters[:tags].empty?
-              conditions << tag_filter_condition(filters[:tags])
-            end
+            conditions << tag_filter_condition(filters[:tags]) if filtering_tasks_by_tags?(filters:, entity:)
 
             return unless filters[:status] && !filters[:status].empty?
 
@@ -244,6 +242,10 @@ module OmnifocusMcp
                          end
             status_condition = filters[:status].map { |s| %(#{status_map} === "#{escape_jxa(s)}") }.join(" || ")
             conditions << "if (!(#{status_condition})) return false;"
+          end
+
+          def filtering_tasks_by_tags?(filters:, entity:)
+            entity == "tasks" && filters[:tags] && !filters[:tags].empty?
           end
 
           def tag_filter_condition(tags)

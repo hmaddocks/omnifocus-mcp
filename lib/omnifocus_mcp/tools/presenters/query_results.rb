@@ -111,9 +111,7 @@ module OmnifocusMcp
             parts << "[rule: #{t["repetitionRule"]}]" if t["repetitionRule"]
             parts << "[parent: #{t["parentId"]}]"     if t["parentId"]
 
-            if t["hasChildren"] && t["childIds"] && !t["childIds"].empty?
-              parts << "[children: #{t["childIds"].join(", ")}]"
-            end
+            parts << "[children: #{t["childIds"].join(", ")}]" if lists_children?(t)
 
             append_date(parts, label: "created", value: t["creationDate"])
             append_date(parts, label: "modified", value: t["modificationDate"])
@@ -179,6 +177,10 @@ module OmnifocusMcp
           def append_date(parts, label:, value:)
             formatted = Utils::IsoDate.to_date_only(value)
             parts << "[#{label}: #{formatted}]" if formatted
+          end
+
+          def lists_children?(task)
+            task["hasChildren"] && task["childIds"] && !task["childIds"].empty?
           end
         end
       end

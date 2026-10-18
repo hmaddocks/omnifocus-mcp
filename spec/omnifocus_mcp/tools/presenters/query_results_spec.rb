@@ -128,6 +128,44 @@ RSpec.describe OmnifocusMcp::Tools::Presenters::QueryResults do
         expect(result).to include("\n  Note: Prep slides")
       end
     end
+
+    context "with child task ids" do
+      subject(:result) { described_class.format_task(task) }
+
+      let(:task) { { "name" => "Parent", "hasChildren" => has_children, "childIds" => child_ids } }
+      let(:has_children) { true }
+      let(:child_ids) { %w[C1 C2] }
+
+      context "when the task has children" do
+        it "lists the child ids" do
+          expect(result).to include("[children: C1, C2]")
+        end
+      end
+
+      context "when hasChildren is false" do
+        let(:has_children) { false }
+
+        it "omits the children segment" do
+          expect(result).not_to include("[children:")
+        end
+      end
+
+      context "when childIds is empty" do
+        let(:child_ids) { [] }
+
+        it "omits the children segment" do
+          expect(result).not_to include("[children:")
+        end
+      end
+
+      context "when childIds is missing" do
+        let(:child_ids) { nil }
+
+        it "omits the children segment" do
+          expect(result).not_to include("[children:")
+        end
+      end
+    end
   end
 
   describe ".format_query_results" do
