@@ -18,10 +18,30 @@ module OmnifocusMcp
             end
           end
 
+          def camel_keys(obj)
+            case obj
+            when Hash
+              obj.each_with_object({}) do |(k, v), out|
+                out[camel_case_key(k)] = camel_keys(v)
+              end
+            when Array
+              obj.map { |item| camel_keys(item) }
+            else
+              obj
+            end
+          end
+
           def snake_case_key(key)
-            return key unless key.is_a?(Symbol) || key.is_a?(String)
+            return key unless key in Symbol | String
 
             key.to_s.gsub(/([a-z\d])([A-Z])/, '\1_\2').downcase.to_sym
+          end
+
+          def camel_case_key(key)
+            return key unless key in Symbol | String
+
+            parts = key.to_s.split("_")
+            ([parts.first] + parts.drop(1).map(&:capitalize)).join
           end
         end
       end

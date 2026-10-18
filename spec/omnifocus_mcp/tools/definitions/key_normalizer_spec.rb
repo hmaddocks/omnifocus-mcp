@@ -78,4 +78,48 @@ RSpec.describe OmnifocusMcp::Tools::Definitions::KeyNormalizer do
       end
     end
   end
+
+  describe ".camel_case_key" do
+    it "converts snake_case Symbols to camelCase Strings" do
+      expect(described_class.camel_case_key(:parent_task_id)).to eq("parentTaskId")
+    end
+
+    it "converts snake_case Strings to camelCase Strings" do
+      expect(described_class.camel_case_key("due_date")).to eq("dueDate")
+    end
+
+    it "leaves single-word keys as Strings" do
+      expect(described_class.camel_case_key(:name)).to eq("name")
+    end
+
+    it "passes non-Symbol/String keys through unchanged" do
+      expect(described_class.camel_case_key(42)).to eq(42)
+    end
+  end
+
+  describe ".camel_keys" do
+    context "with a nested Hash" do
+      subject(:result) { described_class.camel_keys({ due_date: "1", filters: { parent_task_id: "p" } }) }
+
+      it "rewrites keys at every level" do
+        expect(result).to eq("dueDate" => "1", "filters" => { "parentTaskId" => "p" })
+      end
+    end
+
+    context "with a top-level Array of Hashes" do
+      subject(:result) { described_class.camel_keys([{ due_date: "1" }, { due_date: "2" }]) }
+
+      it "rewrites keys in every element" do
+        expect(result).to eq([{ "dueDate" => "1" }, { "dueDate" => "2" }])
+      end
+    end
+
+    context "with a non-Hash value" do
+      subject(:result) { described_class.camel_keys("not a hash") }
+
+      it "passes scalars through unchanged" do
+        expect(result).to eq("not a hash")
+      end
+    end
+  end
 end

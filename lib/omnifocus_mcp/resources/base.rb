@@ -33,44 +33,9 @@ module OmnifocusMcp
         { error: e.message }
       end
 
-      def snake_case_keys(obj)
-        case obj
-        when Hash
-          obj.each_with_object({}) do |(key, value), out|
-            out[snake_case_key(key)] = snake_case_keys(value)
-          end
-        when Array
-          obj.map { |item| snake_case_keys(item) }
-        else
-          obj
-        end
-      end
+      def snake_case_keys(obj) = Tools::Definitions::KeyNormalizer.snake_keys(obj, deep: true)
 
-      def camelize_keys(obj)
-        case obj
-        when Hash
-          obj.each_with_object({}) do |(key, value), out|
-            out[camel_case_key(key)] = camelize_keys(value)
-          end
-        when Array
-          obj.map { |item| camelize_keys(item) }
-        else
-          obj
-        end
-      end
-
-      def snake_case_key(key)
-        return key unless key.is_a?(Symbol) || key.is_a?(String)
-
-        key.to_s.gsub(/([a-z\d])([A-Z])/, '\1_\2').downcase.to_sym
-      end
-
-      def camel_case_key(key)
-        return key unless key.is_a?(Symbol) || key.is_a?(String)
-
-        parts = key.to_s.split("_")
-        ([parts.first] + parts.drop(1).map(&:capitalize)).join
-      end
+      def camelize_keys(obj) = Tools::Definitions::KeyNormalizer.camel_keys(obj)
 
       public
 
