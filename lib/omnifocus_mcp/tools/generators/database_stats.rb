@@ -63,7 +63,7 @@ module OmnifocusMcp
 
           def stats_script = STATS_SCRIPT
 
-          # rubocop:disable Metrics/MethodLength
+          # rubocop:disable-next Metrics/MethodLength
           def changes_script(since_iso)
             escaped_since = Infrastructure::JsEmbed.double_quoted_string(since_iso)
 
@@ -139,7 +139,6 @@ module OmnifocusMcp
               })();
             JS
           end
-          # rubocop:enable Metrics/MethodLength
         end
       end
     end

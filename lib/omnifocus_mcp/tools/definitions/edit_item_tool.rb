@@ -17,7 +17,7 @@ module OmnifocusMcp
         tool_name "edit_item"
         description "Edit a task or project in OmniFocus"
 
-        # rubocop:disable Metrics/BlockLength
+        # rubocop:disable-next Metrics/BlockLength
         arguments do
           optional(:id).filled(:string).description("The ID of the task or project to edit")
           optional(:name).filled(:string)
@@ -59,7 +59,6 @@ module OmnifocusMcp
           optional(:newProjectStatus).filled(included_in?: %w[active completed dropped onHold])
                                      .description("New status for projects")
         end
-        # rubocop:enable Metrics/BlockLength
 
         extend OperationFactory
 

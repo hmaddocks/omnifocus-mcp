@@ -193,7 +193,7 @@ module OmnifocusMcp
 
       # Build the JXA wrapper that calls `app.evaluateJavascript` with the
       # OmniJS source embedded inside a backtick template literal.
-      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable-next Metrics/MethodLength
       def wrap_omnifocus_source(source:, args:)
         script_with_args =
           if Utils::Blank.blank?(args)
@@ -222,7 +222,6 @@ module OmnifocusMcp
           }
         JXA
       end
-      # rubocop:enable Metrics/MethodLength
 
       # JXA stdout -> {Result.ok(parsed)} or {Result.error} on parse failure.
       def parse_jxa_output(stdout)

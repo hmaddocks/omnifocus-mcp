@@ -3,7 +3,7 @@
 module OmnifocusMcp
   module Infrastructure
     # Composable AppleScript fragments for write-side primitives.
-    # rubocop:disable Metrics/ModuleLength
+    # rubocop:disable-next Metrics/ModuleLength
     module AppleScript
       ITEM_TYPES = %w[task project].freeze
       LOOKUP_KINDS = %i[folder project].freeze
@@ -167,7 +167,7 @@ module OmnifocusMcp
           APPLESCRIPT
         end
 
-        # rubocop:disable Metrics/MethodLength
+        # rubocop:disable-next Metrics/MethodLength
         def nested_folder_lookup(var_name:, escaped_components:, error_return_json:)
           leaf_name = escaped_components.last
           list_items = applescript_string_list(escaped_components)
@@ -203,7 +203,6 @@ module OmnifocusMcp
             end if
           APPLESCRIPT
         end
-        # rubocop:enable Metrics/MethodLength
 
         def simple_project_lookup(var_name:, escaped_components:, error_return_json:)
           name = escaped_components.first
@@ -218,7 +217,7 @@ module OmnifocusMcp
           APPLESCRIPT
         end
 
-        # rubocop:disable Metrics/MethodLength
+        # rubocop:disable-next Metrics/MethodLength
         def nested_project_lookup(var_name:, escaped_components:, error_return_json:)
           project_name = escaped_components.last
           folder_components = escaped_components[0...-1]
@@ -255,9 +254,7 @@ module OmnifocusMcp
             end if
           APPLESCRIPT
         end
-        # rubocop:enable Metrics/MethodLength
       end
     end
-    # rubocop:enable Metrics/ModuleLength
   end
 end

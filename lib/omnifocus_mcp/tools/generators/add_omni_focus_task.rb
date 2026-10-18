@@ -215,7 +215,7 @@ module OmnifocusMcp
             APPLESCRIPT
           end
 
-          # rubocop:disable Metrics/MethodLength
+          # rubocop:disable-next Metrics/MethodLength
           def parent_lookup_by_name(fields)
             <<~APPLESCRIPT.chomp
               if parentTask is missing value and "#{fields[:parent_task_name]}" is not "" then
@@ -244,7 +244,6 @@ module OmnifocusMcp
               end if
             APPLESCRIPT
           end
-          # rubocop:enable Metrics/MethodLength
 
           # Pick the container: explicit parent, project root, or inbox.
           def task_creation(fields)
@@ -286,7 +285,7 @@ module OmnifocusMcp
             ["-- Set #{label} date", "set #{label} date of newTask to #{value}"]
           end
 
-          # rubocop:disable Metrics/MethodLength
+          # rubocop:disable-next Metrics/MethodLength
           def placement_derivation(project_name)
             <<~APPLESCRIPT.chomp
               -- Derive placement from container; distinguish real parent vs project root task
@@ -323,7 +322,6 @@ module OmnifocusMcp
               end try
             APPLESCRIPT
           end
-          # rubocop:enable Metrics/MethodLength
 
           def tag_assignments_block(tags)
             return nil if tags.empty?

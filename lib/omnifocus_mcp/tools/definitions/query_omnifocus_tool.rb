@@ -22,7 +22,7 @@ module OmnifocusMcp
 
         DATE_FILTER_FIELDS = %i[due_within deferred_until planned_within due_on defer_on planned_on].freeze
 
-        # rubocop:disable Metrics/BlockLength
+        # rubocop:disable-next Metrics/BlockLength
         arguments do
           required(:entity).filled(included_in?: %w[tasks projects folders]).description(
             "Type of entity to query. Choose 'tasks' for individual tasks, 'projects' for projects, " \
@@ -146,7 +146,6 @@ module OmnifocusMcp
             .filled(:bool)
             .description("Return only count of matches, not full details. Efficient for statistics. Default: false")
         end
-        # rubocop:enable Metrics/BlockLength
 
         extend OperationFactory
 

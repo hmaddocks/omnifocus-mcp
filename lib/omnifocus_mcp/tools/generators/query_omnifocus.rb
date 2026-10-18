@@ -59,6 +59,7 @@ module OmnifocusMcp
           # JSON.parse hands us String keys; pattern matching wants Symbols. A
           # non-Hash response (e.g. raw stdout from a parse failure) becomes
           # +nil+ here so the +in nil+ arm can surface it as an error.
+          # rubocop:disable-next Metrics/CyclomaticComplexity
           def classify_response(response:, summary:)
             shape = response.is_a?(Hash) ? response.transform_keys(&:to_sym) : nil
 
@@ -82,6 +83,7 @@ module OmnifocusMcp
           def build_match(items:, count:, summary:) = Match.new(items: summary ? nil : items, count: count)
 
           # Build the full JXA query script for the given params.
+          # rubocop:disable-next Metrics/AbcSize
           def generate_query_script(params)
             params = Params::McpBoundary.coerce(Params::QueryOmnifocusParams, params)
 
@@ -196,7 +198,7 @@ module OmnifocusMcp
             JS
           end
 
-          # rubocop:disable Metrics/MethodLength
+          # rubocop:disable-next Metrics/MethodLength
           def apply_task_id_filters(filters:, conditions:)
             if filters[:project_id]
               safe_id = escape_jxa(filters[:project_id])
@@ -228,7 +230,6 @@ module OmnifocusMcp
               }
             JS
           end
-          # rubocop:enable Metrics/MethodLength
 
           def apply_tag_status_filters(filters:, conditions:, entity:)
             conditions << tag_filter_condition(filters[:tags]) if filtering_tasks_by_tags?(filters:, entity:)
@@ -255,6 +256,7 @@ module OmnifocusMcp
             "if (!(#{tag_condition})) return false;"
           end
 
+          # rubocop:disable-next Metrics/AbcSize
           def apply_task_date_filters(filters:, conditions:)
             conditions << "if (item.flagged !== #{filters[:flagged]}) return false;" unless filters[:flagged].nil?
 

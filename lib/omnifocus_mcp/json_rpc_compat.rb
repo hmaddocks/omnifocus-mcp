@@ -34,7 +34,7 @@ module OmnifocusMcp
     end
     private_class_method :patch_server_send_error!
 
-    # rubocop:disable Metrics
+    # rubocop:disable-next Metrics
     def patch_stdio_transport!
       return if stdio_transport_patched?
 
@@ -66,7 +66,6 @@ module OmnifocusMcp
         end
       end
     end
-    # rubocop:enable Metrics
     private_class_method :patch_stdio_transport!
 
     def server_send_error_patched?

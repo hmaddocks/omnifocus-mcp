@@ -16,7 +16,7 @@ module OmnifocusMcp
         tool_name "batch_add_items"
         description "Add multiple tasks or projects to OmniFocus in a single operation"
 
-        # rubocop:disable Metrics/BlockLength
+        # rubocop:disable-next Metrics/BlockLength
         arguments do
           required(:items).array(:hash) do
             required(:type).filled(included_in?: %w[task project])
@@ -56,7 +56,6 @@ module OmnifocusMcp
             "Process parents before children; when false, best-effort order will still try to resolve parents first"
           )
         end
-        # rubocop:enable Metrics/BlockLength
 
         extend OperationFactory
 

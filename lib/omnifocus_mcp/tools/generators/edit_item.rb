@@ -302,7 +302,7 @@ module OmnifocusMcp
 
           def non_empty?(value) = value && !value.empty?
 
-          # rubocop:disable Metrics/MethodLength
+          # rubocop:disable-next Metrics/MethodLength
           def tag_replace_block(tags)
             tags_list = tags.map { |t| %("#{Infrastructure::AppleScript.escape(t.to_s)}") }.join(", ")
             <<~APPLESCRIPT.chomp
@@ -331,7 +331,6 @@ module OmnifocusMcp
               set end of changedProperties to "tags (replaced)"
             APPLESCRIPT
           end
-          # rubocop:enable Metrics/MethodLength
 
           def tag_add_block(tags)
             tags_list = tags.map { |t| %("#{Infrastructure::AppleScript.escape(t.to_s)}") }.join(", ")
