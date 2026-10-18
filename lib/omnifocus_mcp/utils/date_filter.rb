@@ -26,8 +26,7 @@ module OmnifocusMcp
       # pinned reference date in tests.
       class << self
         def parse(input, today: Date.today)
-          return input if input.is_a?(Numeric)
-          return input if input.is_a?(Symbol)
+          return input if input.is_a?(Numeric) || input.is_a?(Symbol)
 
           raise_invalid!(input) unless input.is_a?(String) && !input.empty?
 
