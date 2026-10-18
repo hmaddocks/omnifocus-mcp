@@ -22,6 +22,7 @@ module OmnifocusMcp
   def build_logger
     Logger.new($stderr, progname: "omnifocus_mcp").tap { |log| log.level = Logger::WARN }
   end
+
   private :build_logger
 
   def reset_logger_if_stderr_changed

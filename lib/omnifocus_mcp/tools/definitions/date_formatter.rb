@@ -14,9 +14,12 @@ module OmnifocusMcp
             return "" if Utils::Blank.blank?(iso)
 
             case style
-            when :locale  then format_parsed(iso) { |d| us_short_date(d) }
-            when :compact then format_parsed(iso) { |d| us_compact_date(d) }
-            when :iso     then Utils::IsoDate.to_date_only(iso)
+            when :locale
+              format_parsed(iso) { |d| us_short_date(d) }
+            when :compact
+              format_parsed(iso) { |d| us_compact_date(d) }
+            when :iso
+              Utils::IsoDate.to_date_only(iso)
             else raise ArgumentError, "Unknown date style: #{style.inspect}"
             end
           end

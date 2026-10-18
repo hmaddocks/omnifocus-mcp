@@ -29,8 +29,10 @@ module OmnifocusMcp
           # Accept a param struct or a snake_case Hash (e.g. specs, script helpers).
           def coerce(klass, value)
             case value
-            when klass then value
-            when Hash then klass.from_hash(value)
+            when klass
+              value
+            when Hash
+              klass.from_hash(value)
             else raise ArgumentError, "expected #{klass.name}, got #{value.class}"
             end
           end

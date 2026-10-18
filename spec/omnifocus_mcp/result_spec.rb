@@ -290,29 +290,33 @@ RSpec.describe OmnifocusMcp::Result do
   describe "pattern matching" do
     it "supports array deconstruction for an ok result" do
       case described_class.ok(42)
-      in [Integer => n, nil] then expect(n).to eq(42)
-      else                        raise "expected ok pattern"
+      in [Integer => n, nil]
+        expect(n).to eq(42)
+      else raise "expected ok pattern"
       end
     end
 
     it "supports array deconstruction for an error result" do
       case described_class.error("boom")
-      in [nil, String => msg] then expect(msg).to eq("boom")
-      else                         raise "expected error pattern"
+      in [nil, String => msg]
+        expect(msg).to eq("boom")
+      else raise "expected error pattern"
       end
     end
 
     it "supports hash deconstruction with explicit keys" do
       case described_class.ok(:thing)
-      in { value: } then expect(value).to eq(:thing)
+      in { value: }
+        expect(value).to eq(:thing)
       else               raise "expected value match"
       end
     end
 
     it "supports hash deconstruction for an error result" do
       case described_class.error("boom")
-      in { error_message: msg } then expect(msg).to eq("boom")
-      else                           raise "expected error_message match"
+      in { error_message: msg }
+        expect(msg).to eq("boom")
+      else raise "expected error_message match"
       end
     end
   end

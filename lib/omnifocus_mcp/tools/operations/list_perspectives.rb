@@ -11,7 +11,7 @@ module OmnifocusMcp
       class ListPerspectives
         class << self
           def call(params = nil, script_runner: Infrastructure::ScriptRunner, **kwargs)
-            merge_params(params, kwargs).then { |params| new(script_runner:).call(params) }
+            merge_params(params, kwargs).then { new(script_runner:).call(it) }
           end
 
           def classify_response(response:, include_built_in:, include_custom:)

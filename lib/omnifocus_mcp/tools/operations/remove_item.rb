@@ -38,7 +38,7 @@ module OmnifocusMcp
 
         def call(params)
           params = Params::McpBoundary.coerce(Params::RemoveItemParams, params)
-          generator.generate_apple_script(params).then { |script| run_script(script) }
+          generator.generate_apple_script(params).then { run_script(it) }
         rescue StandardError => e
           OmnifocusMcp.logger.warn("[remove_item] Error: #{e}")
           OmnifocusMcp::Result.error(e.message || "Unknown error in remove_item")

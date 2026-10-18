@@ -27,9 +27,11 @@ module OmnifocusMcp
 
           def location_for(args, placement)
             case placement
-            when "parent"  then "under the parent task"
-            when "project" then args[:projectName] ? %(in project "#{args[:projectName]}") : "in a project"
-            else                "in your inbox"
+            when "parent"
+              "under the parent task"
+            when "project"
+              args[:projectName] ? %(in project "#{args[:projectName]}") : "in a project"
+            else "in your inbox"
             end
           end
 

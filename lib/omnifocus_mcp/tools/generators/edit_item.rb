@@ -229,10 +229,14 @@ module OmnifocusMcp
             return nil unless param_provided?(params, :new_status)
 
             case params.new_status.to_s
-            when "completed" then task_status_completed
-            when "dropped" then task_status_dropped
-            when "skipped" then task_status_skipped
-            when "incomplete" then task_status_incomplete
+            when "completed"
+              task_status_completed
+            when "dropped"
+              task_status_dropped
+            when "skipped"
+              task_status_skipped
+            when "incomplete"
+              task_status_incomplete
             end
           end
 

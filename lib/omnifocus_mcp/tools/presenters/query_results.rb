@@ -22,9 +22,12 @@ module OmnifocusMcp
             output << "Filters applied: #{format_filters(filters)}\n\n" if filters && !filters.empty?
 
             output << case entity.to_s
-                      when "tasks"    then format_tasks(items)
-                      when "projects" then format_projects(items)
-                      when "folders"  then format_folders(items)
+                      when "tasks"
+                        format_tasks(items)
+                      when "projects"
+                        format_projects(items)
+                      when "folders"
+                        format_folders(items)
                       else "Unsupported entity: #{entity}"
                       end
 

@@ -67,9 +67,12 @@ RSpec.describe OmnifocusMcp::Resources::TodayResource do
       before do
         allow(OmnifocusMcp::Tools::Operations::QueryOmnifocus).to receive(:call) do |params|
           case params.filters
-          when { due_on: 0 }           then ok_match(due)
-          when { planned_on: 0 }       then ok_match(planned)
-          when { status: ["Overdue"] } then ok_match(overdue)
+          when { due_on: 0 }
+            ok_match(due)
+          when { planned_on: 0 }
+            ok_match(planned)
+          when { status: ["Overdue"] }
+            ok_match(overdue)
           end
         end
       end
@@ -143,9 +146,12 @@ RSpec.describe OmnifocusMcp::Resources::TodayResource do
       before do
         allow(OmnifocusMcp::Tools::Operations::QueryOmnifocus).to receive(:call) do |params|
           case params.filters
-          when { due_on: 0 }           then ok_match(due)
-          when { planned_on: 0 }       then OmnifocusMcp::Result.error("planned failed")
-          when { status: ["Overdue"] } then ok_match(overdue)
+          when { due_on: 0 }
+            ok_match(due)
+          when { planned_on: 0 }
+            OmnifocusMcp::Result.error("planned failed")
+          when { status: ["Overdue"] }
+            ok_match(overdue)
           end
         end
       end
@@ -193,9 +199,12 @@ RSpec.describe OmnifocusMcp::Resources::TodayResource do
       before do
         allow(OmnifocusMcp::Tools::Operations::QueryOmnifocus).to receive(:call) do |params|
           case params.filters
-          when { due_on: 0 }           then ok_match([{ "id" => "d1" }])
-          when { planned_on: 0 }       then ok_match([{ "id" => "p1" }])
-          when { status: ["Overdue"] } then ok_match([{ "id" => "o1" }])
+          when { due_on: 0 }
+            ok_match([{ "id" => "d1" }])
+          when { planned_on: 0 }
+            ok_match([{ "id" => "p1" }])
+          when { status: ["Overdue"] }
+            ok_match([{ "id" => "o1" }])
           end
         end
       end
