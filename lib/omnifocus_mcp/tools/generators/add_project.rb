@@ -36,7 +36,7 @@ module OmnifocusMcp
           def extract_fields(params)
             {
               name: Infrastructure::AppleScript.escape(params.name.to_s),
-              note: Infrastructure::AppleScript.escape(params.note.to_s),
+              note: Infrastructure::AppleScript.multiline_string(params.note.to_s),
               folder_name: params.folder_name.to_s,
               flagged: params.flagged == true,
               sequential: params.sequential == true,

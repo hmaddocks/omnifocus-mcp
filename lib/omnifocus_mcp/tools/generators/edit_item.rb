@@ -146,7 +146,7 @@ module OmnifocusMcp
           def property_update_steps(item_type, params, date_assignments)
             [
               update_string_property("name", params, :new_name),
-              update_string_property("note", params, :new_note),
+              update_string_property("note", params, :new_note, escaper: :multiline_string),
               update_date_step("due date", date_assignments["due date"]),
               update_date_step("defer date", date_assignments["defer date"]),
               update_date_step("planned date", date_assignments["planned date"]),
@@ -176,10 +176,10 @@ module OmnifocusMcp
           end
 
           # `set foo of foundItem to "escaped string"` + changedProperties bump.
-          def update_string_property(label, params, key)
+          def update_string_property(label, params, key, escaper: :escape)
             return nil unless param_provided?(params, key)
 
-            value = Infrastructure::AppleScript.escape(params.public_send(key).to_s)
+            value = Infrastructure::AppleScript.public_send(escaper, params.public_send(key).to_s)
             <<~APPLESCRIPT.chomp
               -- Update #{label}
               set #{label} of foundItem to "#{value}"

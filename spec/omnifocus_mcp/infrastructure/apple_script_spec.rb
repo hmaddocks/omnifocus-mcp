@@ -15,6 +15,20 @@ RSpec.describe OmnifocusMcp::Infrastructure::AppleScript do
     end
   end
 
+  describe ".multiline_string" do
+    it "keeps line feeds as AppleScript escapes" do
+      expect(described_class.multiline_string("a\nb")).to eq('a\nb')
+    end
+
+    it "normalises CRLF and CR to one line feed" do
+      expect(described_class.multiline_string("a\r\nb\rc")).to eq('a\nb\nc')
+    end
+
+    it "escapes AppleScript string delimiters" do
+      expect(described_class.multiline_string('say "hi"')).to eq('say \"hi\"')
+    end
+  end
+
   describe ".tell_document" do
     subject(:script) { described_class.tell_document("set foo to 1") }
 

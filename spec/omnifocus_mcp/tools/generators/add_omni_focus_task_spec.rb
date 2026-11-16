@@ -17,6 +17,14 @@ RSpec.describe OmnifocusMcp::Tools::Generators::AddOmniFocusTask do
     it "does not embed the input name in the reply" do
       expect(script).not_to include(%(\\"name\\":\\"Buy milk\\"))
     end
+
+    context "with a multi-line note" do
+      subject(:script) { described_class.generate_apple_script(name: "Buy milk", note: "one\ntwo") }
+
+      it "keeps the line break" do
+        expect(script).to include('set note of newTask to "one\ntwo"')
+      end
+    end
   end
 
   describe ".generate_bulk_apple_script" do

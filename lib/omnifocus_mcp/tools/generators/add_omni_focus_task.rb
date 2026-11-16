@@ -78,7 +78,7 @@ module OmnifocusMcp
           def extract_fields(params)
             {
               name: Infrastructure::AppleScript.escape(params.name.to_s),
-              note: Infrastructure::AppleScript.escape(params.note.to_s),
+              note: Infrastructure::AppleScript.multiline_string(params.note.to_s),
               project_name: Infrastructure::AppleScript.escape(params.project_name.to_s),
               parent_task_id: Infrastructure::AppleScript.escape(params.parent_task_id.to_s),
               parent_task_name: Infrastructure::AppleScript.escape(params.parent_task_name.to_s),

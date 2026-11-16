@@ -17,5 +17,13 @@ RSpec.describe OmnifocusMcp::Tools::Generators::AddProject do
     it "looks up the destination folder" do
       expect(script).to include(%(first flattened folder where name = "Work"))
     end
+
+    context "with a multi-line note" do
+      subject(:script) { described_class.generate_apple_script(name: "Test Project", note: "one\ntwo") }
+
+      it "keeps the line break" do
+        expect(script).to include('set note of newProject to "one\ntwo"')
+      end
+    end
   end
 end

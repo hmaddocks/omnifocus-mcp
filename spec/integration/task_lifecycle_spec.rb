@@ -194,6 +194,25 @@ RSpec.describe "Task Lifecycle (integration)", :requires_omnifocus do
       end
     end
 
+    context "when setting a multi-line note" do
+      subject(:result) do
+        edit_item.call(
+          item_type: "task",
+          id: task_id,
+          new_note: "line one\nline two"
+        )
+      end
+
+      let(:task_name) { "TEST:Multi-line Note" }
+      let(:create_result) { helpers.create_inbox_task(name: task_name) }
+      let(:task_id) { create_result.ok.task_id }
+      let(:task) { result.ok.then { helpers.find_task(name: task_name) } }
+
+      it "keeps the line break" do
+        expect(task).to include("note" => "line one\nline two")
+      end
+    end
+
     context "when marking a task complete" do
       subject(:result) do
         edit_item.call(

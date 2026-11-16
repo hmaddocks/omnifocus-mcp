@@ -26,6 +26,15 @@ module OmnifocusMcp
                .gsub(/[\r\n]/, " ")
         end
 
+        # Like {escape}, but keeps line breaks: CRLF and CR become LF, and
+        # each LF is written as the AppleScript `\n` escape. Use for notes.
+        def multiline_string(value)
+          value.to_s
+               .gsub(/\r\n?/, "\n")
+               .gsub(/["\\]/) { |m| "\\#{m}" }
+               .gsub("\n", "\\n")
+        end
+
         # Wrap a script `body` in the standard OmniFocus front document
         # envelope used by write-side primitives. The script also defines
         # the `jsonEscape` handler, so the body can call `my jsonEscape(x)`.
