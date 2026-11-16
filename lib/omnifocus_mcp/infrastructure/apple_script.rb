@@ -108,7 +108,9 @@ module OmnifocusMcp
         # then B inside A, then C inside B. Sets `var` to the tag, or to
         # `missing value` when a part is missing and `create` is false.
         def tag_lookup(var:, tag_path:, create:)
-          parts = tag_path.to_s.split("/").reject(&:empty?).map { |part| escape(part) }
+          parts = tag_path.to_s.split("/")
+                          .reject(&:empty?)
+                          .map { |part| escape(part) }
           return "set #{var} to missing value" if parts.empty?
 
           first, *rest = parts
@@ -121,6 +123,7 @@ module OmnifocusMcp
           if create
             lines << %(if #{var} is missing value then set #{var} to make new tag with properties {name:"#{first}"})
           end
+
           rest.each { |part| lines << child_tag_lookup(var:, part:, create:) }
           lines.join("\n")
         end

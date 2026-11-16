@@ -40,6 +40,7 @@ module OmnifocusMcp
         # Generate pure AppleScript for item editing. Dates are constructed
         # outside the `tell` block then referenced from within.
         class << self
+          # rubocop:disable-next Metrics/AbcSize
           def generate_apple_script(params)
             params = Params::McpBoundary.coerce(Params::EditItemParams, params)
             return missing_identifier_error if Utils::Blank.blank?(params.id, params.name)

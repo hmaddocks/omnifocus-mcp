@@ -20,7 +20,7 @@ RSpec.describe OmnifocusMcp::Tools::Generators::QueryOmnifocus do
       let(:filters) { { has_note: false } }
 
       it "compares a boolean note check" do
-        expect(script).to include("const hasNote = Boolean(item.note && item.note.trim().length > 0);")
+        expect(script).to include('const hasNote = (item.note || "").trim().length > 0;')
       end
     end
   end

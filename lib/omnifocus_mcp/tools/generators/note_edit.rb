@@ -95,7 +95,9 @@ module OmnifocusMcp
 
           def js_args(params, mode)
             pairs = replacements(params).map { |r| { find: normalize(r[:find]), replace: normalize(r[:replace]) } }
-            [mode, normalize(params.new_note), pairs, normalize(params.append_note)].map { |arg| JSON.generate(arg) }
+            [
+              mode, normalize(params.new_note), pairs, normalize(params.append_note)
+            ].map { |arg| JSON.generate(arg) }
           end
 
           def normalize(value) = value&.to_s&.gsub(/\r\n?/, "\n")

@@ -285,7 +285,7 @@ module OmnifocusMcp
 
             unless filters[:has_note].nil?
               conditions << <<~JS
-                const hasNote = Boolean(item.note && item.note.trim().length > 0);
+                const hasNote = (item.note || "").trim().length > 0;
                 if (hasNote !== #{filters[:has_note]}) return false;
               JS
             end
