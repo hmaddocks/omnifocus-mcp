@@ -227,6 +227,45 @@ RSpec.describe "Task Lifecycle (integration)", :requires_omnifocus do
       end
     end
 
+    context "when changing part of a note" do
+      subject(:note) do
+        replace = edit_item.call(
+          item_type: "task", id: task_id,
+          note_replacements: [{ find: "Status: open", replace: "Status: claimed" }]
+        )
+        append = replace.ok.then { edit_item.call(item_type: "task", id: task_id, append_note: "Answer: done") }
+        append.ok.then { helpers.find_task(name: task_name)["note"] }
+      end
+
+      let(:task_name) { "TEST:Partial Note" }
+      let(:task_id) { create_result.ok.task_id }
+      let(:create_result) do
+        OmnifocusMcp::IntegrationActions.create_tracked_task(name: task_name, note: "Status: open\nDetails")
+      end
+
+      it "replaces the line and appends the answer" do
+        expect(note).to eq("Status: claimed\nDetails\nAnswer: done")
+      end
+    end
+
+    context "when the note text to replace is missing" do
+      subject(:result) do
+        edit_item.call(
+          item_type: "task", id: task_id, new_name: "TEST:Should Not Rename",
+          note_replacements: [{ find: "Status: open", replace: "Status: claimed" }]
+        )
+      end
+
+      let(:task_name) { "TEST:Missing Note Text" }
+      let(:create_result) { helpers.create_inbox_task(name: task_name) }
+      let(:task_id) { create_result.ok.task_id }
+
+      it "changes nothing" do
+        expect(error: result.error, task: helpers.find_task(name: task_name))
+          .to match(error: include("Note text not found: Status: open"), task: a_hash_including("name" => task_name))
+      end
+    end
+
     context "when marking a task complete" do
       subject(:result) do
         edit_item.call(

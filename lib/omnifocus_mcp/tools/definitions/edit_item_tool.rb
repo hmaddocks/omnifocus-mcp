@@ -26,7 +26,17 @@ module OmnifocusMcp
                              .description("Type of item to edit ('task' or 'project')")
 
           optional(:newName).filled(:string).description("New name for the item")
-          optional(:newNote).filled(:string).description("New note for the item")
+          optional(:newNote).filled(:string).description("New note for the item (replaces the whole note)")
+          optional(:noteReplacements).array(:hash) do
+            required(:find).filled(:string)
+            required(:replace).value(:string)
+          end.description(
+            "Replace text inside the note: every occurrence of each 'find' becomes its 'replace' (case-sensitive). " \
+            "If any 'find' is not in the note, nothing on the item is changed. Applied after newNote."
+          )
+          optional(:appendNote).filled(:string).description(
+            "Text to add to the end of the note, on a new line. Applied after noteReplacements."
+          )
           optional(:newDueDate).maybe(:string).description(
             "New due date in ISO format (YYYY-MM-DD or full ISO date); set to empty string to clear"
           )

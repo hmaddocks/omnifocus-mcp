@@ -29,9 +29,9 @@ module OmnifocusMcp
         :new_due_date, :new_defer_date, :new_planned_date, :new_flagged,
         :new_estimated_minutes, :new_status, :add_tags, :remove_tags,
         :replace_tags, :new_project_name, :new_sequential, :new_folder_name,
-        :new_project_status
+        :new_project_status, :append_note, :note_replacements
       ) do
-        def self.from_mcp(args) = McpBoundary.build(self, args)
+        def self.from_mcp(args) = McpBoundary.build(self, args, deep: true)
         def self.from_hash(hash) = McpBoundary.from_hash(self, hash)
       end
 

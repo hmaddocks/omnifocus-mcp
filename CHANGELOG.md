@@ -7,6 +7,7 @@
 - Escape names in AppleScript JSON replies so a `"` or `\` in a name no longer makes a saved change report as failed
 - Keep line breaks in notes written by `add_omnifocus_task`, `add_project` and `edit_item`
 - Support nested tag paths such as `"Work/Mac"` in `tags`, `addTags`, `removeTags` and `replaceTags`. A tag name containing `/` is now read as a path
+- Add `appendNote` and `noteReplacements` to `edit_item` so part of a note can change without rewriting it
 
 ## [1.0.2]
 

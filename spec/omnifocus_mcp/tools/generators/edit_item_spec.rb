@@ -59,6 +59,57 @@ RSpec.describe OmnifocusMcp::Tools::Generators::EditItem do
       end
     end
 
+    context "with note replacements" do
+      subject(:script) do
+        described_class.generate_apple_script(
+          item_type: "task", id: "abc", new_name: "Renamed",
+          note_replacements: [{ find: "Status: open", replace: "Status: claimed" }]
+        )
+      end
+
+      it "checks the find text is present" do
+        expect(script).to include(%(if (note of foundItem) does not contain "Status: open" then))
+      end
+
+      it "reports missing find text" do
+        expect(script).to include(%(Note text not found: " & my jsonEscape("Status: open")))
+      end
+
+      it "checks before changing anything" do
+        expect(script.index("does not contain")).to be < script.index("set name of foundItem")
+      end
+
+      it "replaces the text" do
+        expect(script).to include(%(my replaceText(note of foundItem, "Status: open", "Status: claimed")))
+      end
+
+      it "defines the replaceText handler" do
+        expect(script).to include("on replaceText(theText, findText, replacementText)")
+      end
+
+      it "reports the change" do
+        expect(script).to include(%(set end of changedProperties to "note (replaced text)"))
+      end
+    end
+
+    context "with appended note text" do
+      subject(:script) do
+        described_class.generate_apple_script(item_type: "task", id: "abc", append_note: "Answer:\ndone")
+      end
+
+      it "appends after a line break when the note is not empty" do
+        expect(script).to include(%(set note of foundItem to (note of foundItem) & linefeed & "Answer:\\ndone"))
+      end
+
+      it "reports the change" do
+        expect(script).to include(%(set end of changedProperties to "note (appended)"))
+      end
+
+      it "does not define replaceText" do
+        expect(script).not_to include("on replaceText")
+      end
+    end
+
     context "with a multi-line name" do
       subject(:script) do
         described_class.generate_apple_script(item_type: "task", id: "abc", new_name: "One\nTwo")

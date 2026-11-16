@@ -57,6 +57,30 @@ RSpec.describe OmnifocusMcp::Tools::Definitions::EditItemTool do
     it "requires itemType" do
       expect(schema[:required]).to eq(["itemType"])
     end
+
+    it "exposes the partial note edit properties" do
+      expect(schema[:properties].keys).to include(:appendNote, :noteReplacements)
+    end
+  end
+
+  describe "#call with partial note edits" do
+    subject(:params) do
+      captured = stub_operation(ok_edited(id: "T1", name: "Ticket"))
+      tool.call(
+        id: "T1", itemType: "task",
+        appendNote: "Answer: done",
+        noteReplacements: [{ "find" => "Status: open", "replace" => "Status: claimed" }]
+      )
+      captured.call
+    end
+
+    it "forwards appendNote" do
+      expect(params.append_note).to eq("Answer: done")
+    end
+
+    it "forwards noteReplacements with symbol keys" do
+      expect(params.note_replacements).to eq([{ find: "Status: open", replace: "Status: claimed" }])
+    end
   end
 
   describe "#call" do
