@@ -26,7 +26,9 @@ This tool was heavily inspired by [OmniFocus MCP Server](https://github.com/them
 - `remove_item` - Removes a task or project by ID, or by name when an ID is not
   available.
 - `edit_item` - Updates a task or project, including names, notes, dates, flags,
-  estimates, statuses, tags, and location.
+  estimates, statuses, tags, and location. `appendNote` adds a line to the end
+  of a note and `noteReplacements` swaps text inside it, without rewriting the
+  whole note.
 - `batch_add_items` - Adds multiple tasks or projects in one operation,
   including support for task hierarchy within the batch.
 - `batch_remove_items` - Removes multiple tasks or projects in one operation.
@@ -109,6 +111,11 @@ RESOURCES:
 
 QUERY FILTER TIPS:
 - Tags filter is case-sensitive and exact match
+- When adding or removing tags, "Parent/Child" picks a nested tag (e.g.
+  "Work/Mac"); a bare name matches the first tag with that name anywhere
+- Use edit_item noteReplacements to change one line of a note (e.g. a
+  "Status: open" line) and appendNote to add to it; newNote replaces the
+  whole note
 - projectName filter is case-insensitive partial match
 - Status values for tasks: Next, Available, Blocked, DueSoon, Overdue
 - Status values for projects: Active, OnHold, Done, Dropped
