@@ -132,7 +132,7 @@ module OmnifocusMcp
               "-- Get the task ID",
               "set taskId to id of newTask as string",
               tag_assignments_block(fields[:tags]),
-              finalize == :bulk ? bulk_record_result : success_return(fields[:name])
+              finalize == :bulk ? bulk_record_result : success_return
             ].compact.join("\n")
           end
 
@@ -173,10 +173,10 @@ module OmnifocusMcp
             APPLESCRIPT
           end
 
-          def success_return(escaped_name)
+          def success_return
             payload = [
               %(\\"taskId\\":\\"" & taskId & "\\"),
-              %(\\"name\\":\\"#{escaped_name}\\"),
+              %(\\"name\\":\\"" & my jsonEscape(name of newTask) & "\\"),
               %(\\"placement\\":\\"" & placement & "\\")
             ].join(",")
             %(return "{\\"success\\":true,#{payload}}")

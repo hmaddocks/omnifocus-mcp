@@ -9,6 +9,14 @@ RSpec.describe OmnifocusMcp::Tools::Generators::AddOmniFocusTask do
     it "creates an inbox task" do
       expect(script).to include(%(make new inbox task with properties {name:"Buy milk"}))
     end
+
+    it "escapes the task name in the reply" do
+      expect(script).to include("my jsonEscape(name of newTask)")
+    end
+
+    it "does not embed the input name in the reply" do
+      expect(script).not_to include(%(\\"name\\":\\"Buy milk\\"))
+    end
   end
 
   describe ".generate_bulk_apple_script" do

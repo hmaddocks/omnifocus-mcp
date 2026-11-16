@@ -75,7 +75,7 @@ RSpec.describe OmnifocusMcp::Utils::AppleScript do
     end
 
     it "returns a JSON error envelope on failure" do
-      expect(wrapped).to include(%(return "{\\"success\\":false,\\"error\\":\\"" & errorMessage & "\\"}"))
+      expect(wrapped).to include(%(\\"error\\":\\"" & my jsonEscape(errorMessage) & "\\"}"))
     end
 
     context "with an empty body" do

@@ -27,7 +27,8 @@ module OmnifocusMcp
         end
 
         # Wrap a script `body` in the standard OmniFocus front document
-        # envelope used by write-side primitives.
+        # envelope used by write-side primitives. The script also defines
+        # the `jsonEscape` handler, so the body can call `my jsonEscape(x)`.
         def tell_document(body)
           <<~APPLESCRIPT
             try
@@ -37,8 +38,30 @@ module OmnifocusMcp
                 end tell
               end tell
             on error errorMessage
-              return "{\\"success\\":false,\\"error\\":\\"" & errorMessage & "\\"}"
+              return "{\\"success\\":false,\\"error\\":\\"" & my jsonEscape(errorMessage) & "\\"}"
             end try
+
+            #{json_escape_handler}
+          APPLESCRIPT
+        end
+
+        # Top-level AppleScript handler that escapes text for a JSON string
+        # value. Backslashes are replaced first so later escapes survive.
+        def json_escape_handler
+          <<~'APPLESCRIPT'.chomp
+            on jsonEscape(theText)
+              set theText to theText as text
+              set replacements to {{"\\", "\\\\"}, {"\"", "\\\""}, {linefeed, "\\n"}, {return, "\\r"}, {tab, "\\t"}}
+              set savedDelimiters to AppleScript's text item delimiters
+              repeat with pair in replacements
+                set AppleScript's text item delimiters to item 1 of pair
+                set parts to text items of theText
+                set AppleScript's text item delimiters to item 2 of pair
+                set theText to parts as text
+              end repeat
+              set AppleScript's text item delimiters to savedDelimiters
+              return theText
+            end jsonEscape
           APPLESCRIPT
         end
 

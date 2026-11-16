@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+- Fix `hasNote: false` excluding tasks with empty notes
+- Stop task queries returning each project's root task as a task
+- Escape names in AppleScript JSON replies so a `"` or `\` in a name no longer makes a saved change report as failed
+
 ## [1.0.2]
 
 - Remove `bundler/setup` from the executable so the gem runs correctly when

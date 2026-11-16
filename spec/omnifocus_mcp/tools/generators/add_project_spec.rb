@@ -10,6 +10,10 @@ RSpec.describe OmnifocusMcp::Tools::Generators::AddProject do
       expect(script).to include(%(make new project with properties {name:"Test Project"}))
     end
 
+    it "escapes the project name in the reply" do
+      expect(script).to include("my jsonEscape(name of newProject)")
+    end
+
     it "looks up the destination folder" do
       expect(script).to include(%(first flattened folder where name = "Work"))
     end

@@ -76,7 +76,8 @@ module OmnifocusMcp
               "-- Get the project ID",
               "set projectId to id of newProject as string",
               tag_assignments_block(fields[:tags]),
-              %(return "{\\"success\\":true,\\"projectId\\":\\"" & projectId & "\\",\\"name\\":\\"#{fields[:name]}\\"}")
+              %(return "{\\"success\\":true,\\"projectId\\":\\"" & projectId & ) +
+                %("\\",\\"name\\":\\"" & my jsonEscape(name of newProject) & "\\"}")
             ].compact.join("\n")
           end
 

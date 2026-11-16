@@ -25,6 +25,26 @@ RSpec.describe OmnifocusMcp::Infrastructure::AppleScript do
     it "indents the supplied body" do
       expect(script).to include("      set foo to 1")
     end
+
+    it "defines the jsonEscape handler" do
+      expect(script).to include("on jsonEscape(theText)")
+    end
+
+    it "escapes the error message in the failure reply" do
+      expect(script).to include("my jsonEscape(errorMessage)")
+    end
+  end
+
+  describe ".json_escape_handler" do
+    subject(:handler) { described_class.json_escape_handler }
+
+    it "escapes backslashes before quotes" do
+      expect(handler.index('{"\\\\", "\\\\\\\\"}')).to be < handler.index('{"\\"", "\\\\\\""}')
+    end
+
+    it "escapes line breaks" do
+      expect(handler).to include('{linefeed, "\\\\n"}')
+    end
   end
 
   describe ".find_item" do

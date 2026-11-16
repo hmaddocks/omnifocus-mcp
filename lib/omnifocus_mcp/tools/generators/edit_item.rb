@@ -221,7 +221,7 @@ module OmnifocusMcp
               end repeat
 
               -- Return success with details
-              return "{\\"success\\":true,\\"id\\":\\"" & itemId & "\\",\\"name\\":\\"" & itemName & "\\",\\"changedProperties\\":\\"" & changedPropsText & "\\"}"
+              return "{\\"success\\":true,\\"id\\":\\"" & itemId & "\\",\\"name\\":\\"" & my jsonEscape(itemName) & "\\",\\"changedProperties\\":\\"" & changedPropsText & "\\"}"
             APPLESCRIPT
           end
 

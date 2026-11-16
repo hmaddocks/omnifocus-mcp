@@ -48,7 +48,7 @@ module OmnifocusMcp
                 delete foundItem
 
                 -- Return success
-                return "{\\"success\\":true,\\"id\\":\\"" & itemId & "\\",\\"name\\":\\"" & itemName & "\\"}"
+                return "{\\"success\\":true,\\"id\\":\\"" & itemId & "\\",\\"name\\":\\"" & my jsonEscape(itemName) & "\\"}"
               else
                 return "{\\"success\\":false,\\"error\\":\\"Item not found\\"}"
               end if

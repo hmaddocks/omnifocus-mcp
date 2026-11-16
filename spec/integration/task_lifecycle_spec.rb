@@ -176,6 +176,24 @@ RSpec.describe "Task Lifecycle (integration)", :requires_omnifocus do
       end
     end
 
+    context "when the task name contains quotes and a backslash" do
+      subject(:result) do
+        edit_item.call(
+          item_type: "task",
+          id: task_id,
+          new_flagged: true
+        )
+      end
+
+      let(:task_name) { 'TEST:Say "hi" \ bye' }
+      let(:create_result) { helpers.create_inbox_task(name: task_name) }
+      let(:task_id) { create_result.ok.task_id }
+
+      it "replies with the exact name" do
+        expect(result.ok.name).to eq(task_name)
+      end
+    end
+
     context "when marking a task complete" do
       subject(:result) do
         edit_item.call(

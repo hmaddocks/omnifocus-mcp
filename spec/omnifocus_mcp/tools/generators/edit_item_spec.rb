@@ -9,5 +9,9 @@ RSpec.describe OmnifocusMcp::Tools::Generators::EditItem do
     it "updates the requested property" do
       expect(script).to include(%(set name of foundItem to "Updated"))
     end
+
+    it "escapes the item name in the reply" do
+      expect(script).to include("my jsonEscape(itemName)")
+    end
   end
 end

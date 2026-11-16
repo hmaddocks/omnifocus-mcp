@@ -13,5 +13,9 @@ RSpec.describe OmnifocusMcp::Tools::Generators::RemoveItem do
     it "deletes the found item" do
       expect(script).to include("delete foundItem")
     end
+
+    it "escapes the item name in the reply" do
+      expect(script).to include("my jsonEscape(itemName)")
+    end
   end
 end
