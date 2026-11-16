@@ -12,6 +12,10 @@ RSpec.describe OmnifocusMcp::Tools::Generators::QueryOmnifocus do
       expect(script).to include('.includes("email")')
     end
 
+    it "skips project root tasks" do
+      expect(script).to include("items = flattenedTasks.filter(task => task.project === null);")
+    end
+
     context "with hasNote filter" do
       let(:filters) { { has_note: false } }
 

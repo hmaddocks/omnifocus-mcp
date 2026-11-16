@@ -512,7 +512,7 @@ module OmnifocusMcp
                   const entityType = "#{entity}";
 
                   if (entityType === "tasks") {
-                    items = flattenedTasks;
+                    items = flattenedTasks.filter(task => task.project === null);
                   } else if (entityType === "projects") {
                     items = flattenedProjects;
                   } else if (entityType === "folders") {
