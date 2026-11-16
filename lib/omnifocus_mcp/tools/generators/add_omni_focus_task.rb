@@ -327,10 +327,7 @@ module OmnifocusMcp
             return nil if tags.empty?
 
             blocks = tags.map do |tag|
-              Infrastructure::AppleScript.tag_assignment(
-                item_var: "newTask",
-                tag_name: Infrastructure::AppleScript.escape(tag.to_s)
-              )
+              Infrastructure::AppleScript.tag_assignment(item_var: "newTask", tag_path: tag.to_s)
             end
 
             "\n-- Add tags if provided\n#{blocks.join("\n")}"

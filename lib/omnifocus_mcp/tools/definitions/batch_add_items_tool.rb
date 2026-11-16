@@ -33,7 +33,10 @@ module OmnifocusMcp
             optional(:flagged).filled(:bool).description("Whether the item is flagged or not")
             optional(:estimatedMinutes).filled(:integer)
                                        .description("Estimated time to complete the item, in minutes")
-            optional(:tags).array(:string).description("Tags to assign to the item")
+            optional(:tags).array(:string).description(
+              "Tags to assign to the item. " \
+              "Use 'Parent/Child' for a nested tag, e.g. 'Work/Mac'; missing tags are created at that path"
+            )
 
             optional(:projectName).filled(:string)
                                   .description("For tasks: The name of the project to add the task to")

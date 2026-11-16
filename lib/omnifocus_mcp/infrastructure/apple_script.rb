@@ -91,22 +91,38 @@ module OmnifocusMcp
           "#{sections.flatten.join("\n")}\n"
         end
 
-        # Add an existing tag to `item_var`, creating it if it does not exist.
-        def tag_assignment(item_var:, tag_name:)
+        # Add the tag at `tag_path` (raw text, e.g. "Parent/Child") to
+        # `item_var`, creating any missing tags along the path.
+        def tag_assignment(item_var:, tag_path:)
           <<~APPLESCRIPT.chomp
             try
-              set theTag to first flattened tag where name = "#{tag_name}"
-              add theTag to tags of #{item_var}
+            #{indent(text: tag_lookup(var: "theTag", tag_path: tag_path, create: true), prefix: "  ")}
+              if theTag is not missing value then add theTag to tags of #{item_var}
             on error
-              -- Tag might not exist, try to create it
-              try
-                set theTag to make new tag with properties {name:"#{tag_name}"}
-                add theTag to tags of #{item_var}
-              on error
-                -- Could not create or add tag
-              end try
+              -- Could not create or add tag
             end try
           APPLESCRIPT
+        end
+
+        # Resolve the tag at `tag_path` (raw text). "A/B/C" finds A anywhere,
+        # then B inside A, then C inside B. Sets `var` to the tag, or to
+        # `missing value` when a part is missing and `create` is false.
+        def tag_lookup(var:, tag_path:, create:)
+          parts = tag_path.to_s.split("/").reject(&:empty?).map { |part| escape(part) }
+          return "set #{var} to missing value" if parts.empty?
+
+          first, *rest = parts
+          lines = [
+            "set #{var} to missing value",
+            "try",
+            %(  set #{var} to first flattened tag whose name is "#{first}"),
+            "end try"
+          ]
+          if create
+            lines << %(if #{var} is missing value then set #{var} to make new tag with properties {name:"#{first}"})
+          end
+          rest.each { |part| lines << child_tag_lookup(var:, part:, create:) }
+          lines.join("\n")
         end
 
         # Generate AppleScript that resolves a folder by path or simple name.
@@ -145,6 +161,22 @@ module OmnifocusMcp
         end
 
         private
+
+        def child_tag_lookup(var:, part:, create:)
+          parent = "#{var}Parent"
+          make_line = "  if #{var} is missing value then set #{var} to " \
+                      "make new tag with properties {name:\"#{part}\"} at end of tags of #{parent}"
+          [
+            "if #{var} is not missing value then",
+            "  set #{parent} to #{var}",
+            "  set #{var} to missing value",
+            "  try",
+            %(    set #{var} to first tag of #{parent} whose name is "#{part}"),
+            "  end try",
+            (make_line if create),
+            "end if"
+          ].compact.join("\n")
+        end
 
         def id_lookup_lines(var:, collection:, item_type:, id:)
           return [] if id.empty?

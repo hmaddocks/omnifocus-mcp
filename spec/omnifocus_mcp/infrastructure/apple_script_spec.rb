@@ -29,6 +29,62 @@ RSpec.describe OmnifocusMcp::Infrastructure::AppleScript do
     end
   end
 
+  describe ".tag_lookup" do
+    subject(:script) { described_class.tag_lookup(var: "t", tag_path: tag_path, create: create) }
+
+    let(:tag_path) { "Gidoca triage/ready-for-agent" }
+    let(:create) { true }
+
+    it "finds the first part anywhere" do
+      expect(script).to include(%(set t to first flattened tag whose name is "Gidoca triage"))
+    end
+
+    it "finds later parts inside the previous tag" do
+      expect(script).to include(%(set t to first tag of tParent whose name is "ready-for-agent"))
+    end
+
+    it "creates missing parts inside the previous tag" do
+      expect(script).to include(%(make new tag with properties {name:"ready-for-agent"} at end of tags of tParent))
+    end
+
+    it "escapes each part" do
+      expect(described_class.tag_lookup(var: "t", tag_path: 'Say "hi"', create: true))
+        .to include(%(whose name is "Say \\"hi\\""))
+    end
+
+    context "without create" do
+      let(:create) { false }
+
+      it "never makes a tag" do
+        expect(script).not_to include("make new tag")
+      end
+    end
+
+    context "with a bare tag name" do
+      let(:tag_path) { "Mac" }
+
+      it "does not walk into child tags" do
+        expect(script).not_to include("first tag of")
+      end
+    end
+
+    context "with a name containing a slash" do
+      let(:tag_path) { "a/b" }
+
+      it "treats it as a path" do
+        expect(script).to include(%(first tag of tParent whose name is "b"))
+      end
+    end
+
+    context "with empty path parts" do
+      let(:tag_path) { "/Mac/" }
+
+      it "ignores them" do
+        expect(script).not_to include("first tag of")
+      end
+    end
+  end
+
   describe ".tell_document" do
     subject(:script) { described_class.tell_document("set foo to 1") }
 

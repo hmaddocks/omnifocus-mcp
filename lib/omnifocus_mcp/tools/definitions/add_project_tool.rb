@@ -28,7 +28,10 @@ module OmnifocusMcp
           optional(:flagged).filled(:bool).description("Whether the project is flagged or not")
           optional(:estimatedMinutes).filled(:integer)
                                      .description("Estimated time to complete the project, in minutes")
-          optional(:tags).array(:string).description("Tags to assign to the project")
+          optional(:tags).array(:string).description(
+            "Tags to assign to the project. " \
+            "Use 'Parent/Child' for a nested tag, e.g. 'Work/Mac'; missing tags are created at that path"
+          )
           optional(:folderName).filled(:string).description(
             "The name of the folder to add the project to (will add to root if not specified)"
           )

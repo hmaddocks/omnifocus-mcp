@@ -51,6 +51,20 @@ RSpec.describe "Task Lifecycle (integration)", :requires_omnifocus do
     end
   end
 
+  context "with a nested tag path" do
+    subject(:parent_name) { result.ok.then { |created| helpers.first_tag_parent_name(created.task_id) } }
+
+    let(:result) { helpers.create_inbox_task_with_tags(name: "TEST:Nested Tag", tags: ["TEST:Triage/TEST:ready"]) }
+
+    before { helpers.create_tracked_tag(name: "TEST:ready") }
+
+    after { helpers.track_tags_by_prefix("TEST:Triage") }
+
+    it "tags the task with the child of the named parent" do
+      expect(parent_name).to eq("TEST:Triage")
+    end
+  end
+
   context "when moving tasks" do
     context "from the inbox to the test project" do
       subject(:result) do

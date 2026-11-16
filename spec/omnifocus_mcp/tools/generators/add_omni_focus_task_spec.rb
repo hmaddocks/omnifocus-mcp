@@ -18,6 +18,14 @@ RSpec.describe OmnifocusMcp::Tools::Generators::AddOmniFocusTask do
       expect(script).not_to include(%(\\"name\\":\\"Buy milk\\"))
     end
 
+    context "with a nested tag" do
+      subject(:script) { described_class.generate_apple_script(name: "Buy milk", tags: ["Gidoca triage/ready"]) }
+
+      it "looks the child up inside its parent" do
+        expect(script).to include(%(first tag of theTagParent whose name is "ready"))
+      end
+    end
+
     context "with a multi-line note" do
       subject(:script) { described_class.generate_apple_script(name: "Buy milk", note: "one\ntwo") }
 

@@ -16,6 +16,7 @@ module OmnifocusMcp
         tool_name "add_omnifocus_task"
         description "Add a new task to OmniFocus"
 
+        # rubocop:disable-next Metrics/BlockLength
         arguments do
           required(:name).filled(:string).description("The name of the task")
           optional(:note).filled(:string).description("Additional notes for the task")
@@ -30,7 +31,10 @@ module OmnifocusMcp
           optional(:flagged).filled(:bool).description("Whether the task is flagged or not")
           optional(:estimatedMinutes).filled(:integer)
                                      .description("Estimated time to complete the task, in minutes")
-          optional(:tags).array(:string).description("Tags to assign to the task")
+          optional(:tags).array(:string).description(
+            "Tags to assign to the task. " \
+            "Use 'Parent/Child' for a nested tag, e.g. 'Work/Mac'; missing tags are created at that path"
+          )
           optional(:projectName).filled(:string).description(
             "The name of the project to add the task to (will add to inbox if not specified)"
           )

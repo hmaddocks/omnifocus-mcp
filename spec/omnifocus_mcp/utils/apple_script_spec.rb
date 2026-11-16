@@ -210,10 +210,10 @@ RSpec.describe OmnifocusMcp::Utils::AppleScript do
   end
 
   describe ".tag_assignment" do
-    subject(:script) { described_class.tag_assignment(item_var: "newTask", tag_name: "urgent") }
+    subject(:script) { described_class.tag_assignment(item_var: "newTask", tag_path: "urgent") }
 
     it "looks up the tag by name" do
-      expect(script).to include(%(first flattened tag where name = "urgent"))
+      expect(script).to include(%(first flattened tag whose name is "urgent"))
     end
 
     it "adds the tag to the item" do
@@ -228,8 +228,16 @@ RSpec.describe OmnifocusMcp::Utils::AppleScript do
       expect(script).to include("-- Could not create or add tag")
     end
 
+    context "with a nested tag path" do
+      subject(:script) { described_class.tag_assignment(item_var: "newTask", tag_path: "Gidoca triage/ready") }
+
+      it "looks up the child inside its parent" do
+        expect(script).to include(%(first tag of theTagParent whose name is "ready"))
+      end
+    end
+
     context "with a custom item variable" do
-      subject(:script) { described_class.tag_assignment(item_var: "editedTask", tag_name: "work") }
+      subject(:script) { described_class.tag_assignment(item_var: "editedTask", tag_path: "work") }
 
       it "adds the tag to the custom item variable" do
         expect(script).to include("add theTag to tags of editedTask")

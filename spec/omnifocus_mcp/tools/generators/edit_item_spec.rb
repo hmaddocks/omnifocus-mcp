@@ -24,6 +24,41 @@ RSpec.describe OmnifocusMcp::Tools::Generators::EditItem do
       end
     end
 
+    context "when adding a nested tag" do
+      subject(:script) do
+        described_class.generate_apple_script(item_type: "task", id: "abc", add_tags: ["Gidoca triage/ready"])
+      end
+
+      it "looks the child up inside its parent" do
+        expect(script).to include(%(first tag of theTagParent whose name is "ready"))
+      end
+    end
+
+    context "when removing a nested tag" do
+      subject(:script) do
+        described_class.generate_apple_script(item_type: "task", id: "abc", remove_tags: ["Gidoca triage/wontfix"])
+      end
+
+      it "does not create the tag" do
+        expect(script).not_to include("make new tag")
+      end
+
+      it "removes the found tag" do
+        expect(script).to include("remove theTag from tags of foundItem")
+      end
+    end
+
+    context "when replacing tags" do
+      subject(:script) do
+        described_class.generate_apple_script(item_type: "task", id: "abc", replace_tags: ["Gidoca triage/ready"])
+      end
+
+      it "clears existing tags before adding" do
+        expect(script.index("remove existingTag from tags of foundItem"))
+          .to be < script.index(%(first tag of theTagParent whose name is "ready"))
+      end
+    end
+
     context "with a multi-line name" do
       subject(:script) do
         described_class.generate_apple_script(item_type: "task", id: "abc", new_name: "One\nTwo")

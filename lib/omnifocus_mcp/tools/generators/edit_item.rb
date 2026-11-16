@@ -302,70 +302,48 @@ module OmnifocusMcp
 
           def non_empty?(value) = value && !value.empty?
 
-          # rubocop:disable-next Metrics/MethodLength
           def tag_replace_block(tags)
-            tags_list = tags.map { |t| %("#{Infrastructure::AppleScript.escape(t.to_s)}") }.join(", ")
             <<~APPLESCRIPT.chomp
-              -- Replace all tags
-              set tagNames to {#{tags_list}}
+              -- Replace all tags: first clear the existing ones
               set existingTags to tags of foundItem
-
-              -- First clear all existing tags
               repeat with existingTag in existingTags
                 remove existingTag from tags of foundItem
               end repeat
 
-              -- Then add new tags
-              repeat with tagName in tagNames
-                set tagObj to missing value
-                try
-                  set tagObj to first flattened tag where name = (tagName as string)
-                on error
-                  -- Tag doesn't exist, create it
-                  set tagObj to make new tag with properties {name:(tagName as string)}
-                end try
-                if tagObj is not missing value then
-                  add tagObj to tags of foundItem
-                end if
-              end repeat
+              #{add_tag_lines(tags)}
               set end of changedProperties to "tags (replaced)"
             APPLESCRIPT
           end
 
           def tag_add_block(tags)
-            tags_list = tags.map { |t| %("#{Infrastructure::AppleScript.escape(t.to_s)}") }.join(", ")
             <<~APPLESCRIPT.chomp
               -- Add tags
-              set tagNames to {#{tags_list}}
-              repeat with tagName in tagNames
-                set tagObj to missing value
-                try
-                  set tagObj to first flattened tag where name = (tagName as string)
-                on error
-                  -- Tag doesn't exist, create it
-                  set tagObj to make new tag with properties {name:(tagName as string)}
-                end try
-                if tagObj is not missing value then
-                  add tagObj to tags of foundItem
-                end if
-              end repeat
+              #{add_tag_lines(tags)}
               set end of changedProperties to "tags (added)"
             APPLESCRIPT
           end
 
           def tag_remove_block(tags)
-            tags_list = tags.map { |t| %("#{Infrastructure::AppleScript.escape(t.to_s)}") }.join(", ")
+            removals = tags.map do |tag|
+              lookup = Infrastructure::AppleScript.tag_lookup(var: "theTag", tag_path: tag.to_s, create: false)
+              <<~APPLESCRIPT.chomp
+                try
+                #{Infrastructure::AppleScript.indent(text: lookup, prefix: "  ")}
+                  if theTag is not missing value then remove theTag from tags of foundItem
+                end try
+              APPLESCRIPT
+            end
+
             <<~APPLESCRIPT.chomp
               -- Remove tags
-              set tagNames to {#{tags_list}}
-              repeat with tagName in tagNames
-                try
-                  set tagObj to first flattened tag where name = (tagName as string)
-                  remove tagObj from tags of foundItem
-                end try
-              end repeat
+              #{removals.join("\n")}
               set end of changedProperties to "tags (removed)"
             APPLESCRIPT
+          end
+
+          def add_tag_lines(tags)
+            tags.map { |tag| Infrastructure::AppleScript.tag_assignment(item_var: "foundItem", tag_path: tag.to_s) }
+                .join("\n")
           end
 
           def apply_new_project_name(params)

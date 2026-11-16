@@ -45,9 +45,18 @@ module OmnifocusMcp
             "repeating tasks \u2014 it completes the current occurrence to trigger the next repeat, then " \
             "drops the completed instance."
           )
-          optional(:addTags).array(:string).description("Tags to add to the task")
-          optional(:removeTags).array(:string).description("Tags to remove from the task")
-          optional(:replaceTags).array(:string).description("Tags to replace all existing tags with")
+          optional(:addTags).array(:string).description(
+            "Tags to add to the task. " \
+            "Use 'Parent/Child' for a nested tag, e.g. 'Work/Mac'; missing tags are created at that path"
+          )
+          optional(:removeTags).array(:string).description(
+            "Tags to remove from the task. " \
+            "Use 'Parent/Child' for a nested tag, e.g. 'Work/Mac'; missing tags are ignored"
+          )
+          optional(:replaceTags).array(:string).description(
+            "Tags to replace all existing tags with. " \
+            "Use 'Parent/Child' for a nested tag, e.g. 'Work/Mac'; missing tags are created at that path"
+          )
           optional(:newProjectName).maybe(:string).description(
             "Move this task to a different project by name or folder path (e.g. 'My Project' or " \
             "'Work/My Project' to disambiguate). Pass an empty string or 'inbox' to move the task to " \

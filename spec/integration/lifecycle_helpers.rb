@@ -10,6 +10,41 @@ module OmnifocusMcp
       IntegrationActions.create_tracked_task(name: name)
     end
 
+    def create_inbox_task_with_tags(name:, tags:)
+      IntegrationActions.create_tracked_task(name: name, tags: tags)
+    end
+
+    # Create a top-level tag and register it for teardown.
+    def create_tracked_tag(name:)
+      IntegrationHelpers.assert_test_prefix!(name)
+      id = IntegrationHelpers.exec_apple_script(<<~APPLESCRIPT)
+        tell application "OmniFocus"
+          tell front document
+            return id of (make new tag with properties {name:"#{name}"}) as string
+          end tell
+        end tell
+      APPLESCRIPT
+      IntegrationSetup.registry.track(id, name, :tag)
+    end
+
+    # Name of the tag that contains the task's first tag.
+    def first_tag_parent_name(task_id)
+      IntegrationHelpers.exec_apple_script(<<~APPLESCRIPT)
+        tell application "OmniFocus"
+          tell front document
+            return name of container of first tag of (first flattened task whose id is "#{task_id}")
+          end tell
+        end tell
+      APPLESCRIPT
+    end
+
+    # Register every tag whose name starts with `prefix` for teardown.
+    def track_tags_by_prefix(prefix)
+      IntegrationHelpers.find_items_by_prefix(prefix, :tag).each do |tag|
+        IntegrationSetup.registry.track(tag[:id], tag[:name], :tag)
+      end
+    end
+
     def create_project_task(name:, project_name:)
       IntegrationActions.create_tracked_task(name: name, project_name: project_name)
     end

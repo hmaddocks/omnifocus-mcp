@@ -18,6 +18,14 @@ RSpec.describe OmnifocusMcp::Tools::Generators::AddProject do
       expect(script).to include(%(first flattened folder where name = "Work"))
     end
 
+    context "with a nested tag" do
+      subject(:script) { described_class.generate_apple_script(name: "Test Project", tags: ["Work/Mac"]) }
+
+      it "looks the child up inside its parent" do
+        expect(script).to include(%(first tag of theTagParent whose name is "Mac"))
+      end
+    end
+
     context "with a multi-line note" do
       subject(:script) { described_class.generate_apple_script(name: "Test Project", note: "one\ntwo") }
 
