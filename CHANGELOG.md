@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.1]
 
 - Fix `hasNote: false` excluding tasks with empty notes
 - Stop task queries returning each project's root task as a task
