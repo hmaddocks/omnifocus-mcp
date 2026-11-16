@@ -32,7 +32,8 @@ module OmnifocusMcp
             required(:replace).value(:string)
           end.description(
             "Replace text inside the note: every occurrence of each 'find' becomes its 'replace' (case-sensitive). " \
-            "If any 'find' is not in the note, nothing on the item is changed. Applied after newNote."
+            "If any 'find' is not in the note, nothing on the item is changed. Applied after newNote. " \
+            "Links, attachments and styles elsewhere in the note are kept."
           )
           optional(:appendNote).filled(:string).description(
             "Text to add to the end of the note, on a new line. Applied after noteReplacements."

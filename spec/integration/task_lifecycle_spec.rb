@@ -248,6 +248,42 @@ RSpec.describe "Task Lifecycle (integration)", :requires_omnifocus do
       end
     end
 
+    context "when changing part of a note that has a link" do
+      subject(:link) do
+        replace = edit_item.call(
+          item_type: "task", id: task_id,
+          note_replacements: [{ find: "Status: open", replace: "Status: claimed" }]
+        )
+        append = replace.ok.then { edit_item.call(item_type: "task", id: task_id, append_note: "Answer: done") }
+        append.ok.then { helpers.note_link(task_id) }
+      end
+
+      let(:task_id) { helpers.create_task_with_linked_note(name: "TEST:Linked Note", note: "Status: open\nSee link") }
+
+      it "keeps the link" do
+        expect(link).to eq("https://example.com")
+      end
+    end
+
+    context "when a replacement contains its own find text" do
+      subject(:note) do
+        edit_item.call(
+          item_type: "task", id: task_id,
+          note_replacements: [{ find: "open", replace: "reopened" }]
+        ).ok.then { helpers.find_task(name: task_name)["note"] }
+      end
+
+      let(:task_name) { "TEST:Self Replace" }
+      let(:task_id) { create_result.ok.task_id }
+      let(:create_result) do
+        OmnifocusMcp::IntegrationActions.create_tracked_task(name: task_name, note: "open and open")
+      end
+
+      it "replaces each occurrence once" do
+        expect(note).to eq("reopened and reopened")
+      end
+    end
+
     context "when the note text to replace is missing" do
       subject(:result) do
         edit_item.call(

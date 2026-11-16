@@ -7,6 +7,7 @@ require_relative "../../utils/blank"
 require_relative "../../result"
 require_relative "../../infrastructure/script_runner"
 require_relative "../params"
+require_relative "note_edit"
 
 module OmnifocusMcp
   module Tools
@@ -36,22 +37,6 @@ module OmnifocusMcp
         }.freeze
         private_constant :PROJECT_STATUS_MAP
 
-        # Case-sensitive replace of every `findText` in `theText`.
-        REPLACE_TEXT_HANDLER = <<~APPLESCRIPT.chomp
-          on replaceText(theText, findText, replacementText)
-            considering case
-              set savedDelimiters to AppleScript's text item delimiters
-              set AppleScript's text item delimiters to findText
-              set parts to text items of theText
-              set AppleScript's text item delimiters to replacementText
-              set theText to parts as text
-              set AppleScript's text item delimiters to savedDelimiters
-            end considering
-            return theText
-          end replaceText
-        APPLESCRIPT
-        private_constant :REPLACE_TEXT_HANDLER
-
         # Generate pure AppleScript for item editing. Dates are constructed
         # outside the `tell` block then referenced from within.
         class << self
@@ -65,8 +50,7 @@ module OmnifocusMcp
             date_pre_scripts, date_assignments = collect_date_assignments(params)
             [
               date_pre_scripts.join("\n\n"),
-              Infrastructure::AppleScript.tell_document(document_body(item_type, id, name, params, date_assignments)),
-              extra_handlers(params)
+              Infrastructure::AppleScript.tell_document(document_body(item_type, id, name, params, date_assignments))
             ].reject(&:empty?).join("\n\n")
           end
 
@@ -154,80 +138,18 @@ module OmnifocusMcp
               "set itemId to id of foundItem as string",
               "set changedProperties to {}"
             ]
-            steps << note_replacement_guards(params)
+            steps << NoteEdit.guard_step(params)
             steps.concat(property_update_steps(item_type, params, date_assignments).compact)
             steps << finalize_and_return
 
             steps.compact.join("\n\n")
           end
 
-          def note_replacements(params) = Array(params.note_replacements)
-
-          # Top-level handlers this script needs beyond `jsonEscape`.
-          def extra_handlers(params) = note_replacements(params).empty? ? "" : REPLACE_TEXT_HANDLER
-
-          def note_text(value) = Infrastructure::AppleScript.multiline_string(value.to_s)
-
-          # Fail before any change if a `find` text is not in the note.
-          def note_replacement_guards(params)
-            replacements = note_replacements(params)
-            return nil if replacements.empty?
-
-            guards = replacements.map do |replacement|
-              find = note_text(replacement[:find])
-              <<~APPLESCRIPT.chomp
-                if (note of foundItem) does not contain "#{find}" then
-                  return "{\\"success\\":false,\\"error\\":\\"Note text not found: " & my jsonEscape("#{find}") & "\\"}"
-                end if
-              APPLESCRIPT
-            end
-
-            <<~APPLESCRIPT.chomp
-              -- Check every note replacement can apply before changing anything
-              considering case
-              #{Infrastructure::AppleScript.indent(text: guards.join("\n"), prefix: "  ").lstrip}
-              end considering
-            APPLESCRIPT
-          end
-
-          def apply_note_replacements(params)
-            replacements = note_replacements(params)
-            return nil if replacements.empty?
-
-            lines = replacements.map do |replacement|
-              find = note_text(replacement[:find])
-              replace = note_text(replacement[:replace])
-              %(set note of foundItem to my replaceText(note of foundItem, "#{find}", "#{replace}"))
-            end
-
-            <<~APPLESCRIPT.chomp
-              -- Replace text inside the note
-              #{lines.join("\n")}
-              set end of changedProperties to "note (replaced text)"
-            APPLESCRIPT
-          end
-
-          def apply_append_note(params)
-            return nil unless param_provided?(params, :append_note)
-
-            text = note_text(params.append_note)
-            <<~APPLESCRIPT.chomp
-              -- Append to the note
-              if (note of foundItem) is "" then
-                set note of foundItem to "#{text}"
-              else
-                set note of foundItem to (note of foundItem) & linefeed & "#{text}"
-              end if
-              set end of changedProperties to "note (appended)"
-            APPLESCRIPT
-          end
-
           def property_update_steps(item_type, params, date_assignments)
             [
               update_string_property("name", params, :new_name),
               update_string_property("note", params, :new_note, escaper: :multiline_string),
-              apply_note_replacements(params),
-              apply_append_note(params),
+              NoteEdit.apply_step(params),
               update_date_step("due date", date_assignments["due date"]),
               update_date_step("defer date", date_assignments["defer date"]),
               update_date_step("planned date", date_assignments["planned date"]),

@@ -27,6 +27,40 @@ module OmnifocusMcp
       IntegrationSetup.registry.track(id, name, :tag)
     end
 
+    # Inbox task whose note has a link on the word "link". Returns the task id.
+    def create_task_with_linked_note(name:, note:)
+      IntegrationHelpers.assert_test_prefix!(name)
+      id = evaluate_omni_js(<<~JS)
+        (() => {
+          const t = new Task(#{name.to_json}, inbox.ending);
+          t.note = #{note.to_json};
+          t.noteText.styleForRange(t.noteText.find("link", null, null))
+            .set(Style.Attribute.Link, URL.fromString("https://example.com"));
+          return t.id.primaryKey;
+        })()
+      JS
+      IntegrationSetup.registry.track(id, name, :task)
+      id
+    end
+
+    # URL linked on the word "link" in the task's note, or nil.
+    def note_link(task_id)
+      result = evaluate_omni_js(<<~JS)
+        (() => {
+          const text = Task.byIdentifier(#{task_id.to_json}).noteText;
+          const range = text.find("link", null, null);
+          const url = range && text.styleForRange(range).get(Style.Attribute.Link);
+          return url ? url.string : "";
+        })()
+      JS
+      result.empty? ? nil : result
+    end
+
+    def evaluate_omni_js(source)
+      escaped = source.gsub(/["\\]/) { "\\#{it}" }.tr("\n", " ")
+      IntegrationHelpers.exec_apple_script(%(tell application "OmniFocus" to evaluate javascript "#{escaped}"))
+    end
+
     # Name of the tag that contains the task's first tag.
     def first_tag_parent_name(task_id)
       IntegrationHelpers.exec_apple_script(<<~APPLESCRIPT)
